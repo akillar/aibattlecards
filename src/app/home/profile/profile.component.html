@@ -170,6 +170,13 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Documentation Link</label>
+                        <input type="text" formControlName="documentationlink" placeholder="Documentation Link" />
+                    </div>
+
+
+
+                    <div class="form-group">
                         <label>Product Facebook Link</label>
                         <input type="text" formControlName="productfb" placeholder="Product Facebook Link" />
                     </div>
@@ -227,6 +234,24 @@
                             </button>
                         </div>
                     </div>
+
+
+
+
+
+                    <div class="form-group" formArrayName="repositories">
+                        <label>Repositories</label>
+                        <div *ngFor="let repo of repositories.controls; let i = index" class="dynamic-field">
+                            <input type="url" [formControlName]="i"
+                                placeholder="Enter repo link (e.g., GitHub, GitLab)" />
+                            <button type="button" class="btn-add" (click)="addField(repositories)">+</button>
+                            <button type="button" class="btn-remove" (click)="removeField(repositories, i)">
+                                -
+                            </button>
+                        </div>
+                    </div>
+
+
 
                     <div class="form-group">
                         <label>Description</label>

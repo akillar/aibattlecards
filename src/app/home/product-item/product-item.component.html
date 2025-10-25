@@ -183,11 +183,19 @@
             </li>
 
             <li *ngIf="productDetails.founders.length">
+                <strong>Repositories:</strong>
+                <div class="chip-wrapper">
+                    <span class="chip" *ngFor="let f of productDetails.repositories">{{ f }}</span>
+                </div>
+            </li>
+
+            <li *ngIf="productDetails.founders.length">
                 <strong>Founders:</strong>
                 <div class="chip-wrapper">
                     <span class="chip" *ngFor="let f of productDetails.founders">{{ f }}</span>
                 </div>
             </li>
+
 
             <li *ngIf="productDetails.producttechnology.length">
                 <strong>Technology:</strong>
@@ -217,6 +225,12 @@
                 <a *ngIf="productDetails.productwebsite" [href]="productDetails.productwebsite" target="_blank">Click
                     Here</a>
             </li>
+
+            <li><strong>Documentation:</strong>
+                <a *ngIf="productDetails.productdocumentation" [href]="productDetails.productdocumentation" target="_blank">Click
+                    Here</a>
+            </li>
+
         </ul>
     </div>
 

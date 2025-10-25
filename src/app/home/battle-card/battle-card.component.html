@@ -3,7 +3,9 @@
 
 <div class="battle-card-wrapper">
 
-    <select class="select-category" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+    <div class="selecttag-holder">
+        <h1 class="tag-heading"> Choose the Catgory you want to compaire</h1>
+        <select class="select-category" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
         <option value="" disabled selected>Select a Category</option>
         <option value="AI model">AI model</option>
         <option value="Agent">Agent</option>
@@ -13,6 +15,8 @@
         <option value="Dev Tools">Dev Tools</option>
         <option value="Utility">Utility</option>
     </select>
+
+    </div>
 
     <!-- Search Input (only show after category selected) -->
     <div class="searchinputwrapper" *ngIf="iscategoryselected">
@@ -98,7 +102,7 @@
                 <th *ngFor="let tool of selectedTools" class="tool-col">
                     <div class="tool-header">
                         <img [src]="tool.productimage" [alt]="tool.productname" class="header-tool-img clickable-image"
-                            (click)="openImagePreview(tool.productimage, tool.productname)"
+                            (click)="navigatetoProductScreen(tool.productid)"
                             title="Click to enlarge image">
                     </div>
                 </th>
@@ -181,23 +185,7 @@
         </tbody>
     </table>
 
-
-    <div *ngIf="imagePreviewModal" class="image-preview-backdrop" (click)="closeImagePreview()">
-        <div class="image-preview-modal" (click)="$event.stopPropagation()">
-            <button class="image-close-btn" (click)="closeImagePreview()" aria-label="Close image preview">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-            <div class="image-container">
-                <img [src]="previewImageSrc" [alt]="previewImageAlt" class="preview-image">
-                <div class="image-caption">
-                    <h4>{{ previewImageAlt }}</h4>
-                </div>
-            </div>
-        </div>
-    </div>
+ 
 
 
 

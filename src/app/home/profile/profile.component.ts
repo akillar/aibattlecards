@@ -38,6 +38,7 @@ export class ProfileComponent implements OnInit {
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
   productAddingForm!: FormGroup;
+  reposAddingForm!: FormGroup;
   showDeleteConfirm: boolean = false;
   showReviewDeleteConfirm: boolean = false;
   isaddingnewproduct: boolean = false;
@@ -123,8 +124,10 @@ this.productAddingForm = this.fb.group({
       deployments: this.fb.array([this.fb.control('', Validators.required)]),
 
       mediaPreviews: this.fb.array([this.fb.control(null)]),
+      repositories: this.fb.array([this.fb.control(null)]),
 
       productfb: [''],
+      documentationlink: [''],
       productlinkedin: ['']
     });
  
@@ -383,6 +386,11 @@ async getProductDetailsToUpdate(productId: string): Promise<void> {
     return this.productAddingForm.get('mediaPreviews') as FormArray;
   }
 
+ get repositories(): FormArray {
+  return this.productAddingForm.get('repositories') as FormArray;
+}
+
+
  
 
 
@@ -640,7 +648,7 @@ async createProduct(): Promise<void> {
   if (this.productAddingForm.valid) {
     const formData = new FormData();
 
-    // Append all form values
+    // 🔹 Append text inputs
     formData.append('name', this.productAddingForm.get('name')?.value);
     formData.append('type', this.productAddingForm.get('type')?.value);
     formData.append('license', this.productAddingForm.get('license')?.value);
@@ -648,9 +656,10 @@ async createProduct(): Promise<void> {
     formData.append('website', this.productAddingForm.get('website')?.value);
     formData.append('fundingStage', this.productAddingForm.get('fundingStage')?.value);
     formData.append('productdescription', this.productAddingForm.get('productdescription')?.value);
+    formData.append('productdocumentation', this.productAddingForm.get('productdocumentation')?.value);
     formData.append('userid', this.userid);
 
-    // Append array fields
+    // 🔹 Append array fields
     const founders = this.productAddingForm.get('founders')?.value || [];
     founders.forEach((f: string, i: number) => formData.append(`founders[${i}]`, f));
 
@@ -666,20 +675,22 @@ async createProduct(): Promise<void> {
     const mediaPreviews = this.productAddingForm.get('mediaPreviews')?.value || [];
     mediaPreviews.forEach((m: string, i: number) => formData.append(`mediaPreviews[${i}]`, m));
 
-    // Append product image as File
-    const fileInput = (document.querySelector('input[type="file"]') as HTMLInputElement);
+    // ✅ Add Repositories
+    const repositories = this.productAddingForm.get('repositories')?.value || [];
+    repositories.forEach((r: string, i: number) => formData.append(`repositories[${i}]`, r));
+
+    // ✅ Append documentation link
+    formData.append('documentationlink', this.productAddingForm.get('documentationlink')?.value || '');
+
+    // ✅ Product image as File
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput?.files?.[0]) {
-      formData.append('productImage', fileInput.files[0]); // ✅ send as File
+      formData.append('productImage', fileInput.files[0]);
     }
 
-    // Append optional social links
+    // ✅ Social Links
     formData.append('productfb', this.productAddingForm.get('productfb')?.value || '');
     formData.append('productlinkedin', this.productAddingForm.get('productlinkedin')?.value || '');
-
-    // --- LOG ALL FORM DATA ---
-// formData.forEach((value, key) => {
-//   console.log(key, value);
-// });
 
     // Send to backend
     this.http.post(this.APIURL + 'insert_product', formData).subscribe({
@@ -692,20 +703,24 @@ async createProduct(): Promise<void> {
           this.selectedImage = null;
           this.getProductDetails(this.userid);
           this.messageVisible = true;
-          this.showMessage("Product Is Added","success");
-       
+          this.showMessage("✅ Product Added Successfully", "success");
         }
       },
       error: (error) => {
         console.error('❌ Error inserting product:', error);
+        this.showMessage("Error adding product", "error");
       }
     });
-
   } else {
     this.productAddingForm.markAllAsTouched();
     console.warn('❌ Form is invalid.');
   }
 }
+
+
+
+
+
 showMessage(msg: string, type: 'success' | 'error') {
   this.message = msg;
   this.messageClass = type === 'success' ? 'green-good' : 'red-bad';

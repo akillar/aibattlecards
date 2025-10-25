@@ -23,7 +23,7 @@
 }
 
 .tab.active {
-  background-color: #ff69b4; /* Pink */
+  background-color: #c1c1c1; /* Pink */
   color: white;
 }
 
@@ -48,7 +48,6 @@
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #ff69b4;
 }
 
 /* Form Styles */
@@ -138,8 +137,8 @@
 
 button[type="submit"] {
   padding: 0.8rem 1rem;
-  background-color: #ff69b4;
-  color: white;
+  background-color: #7c9afa;
+  color:white;
   font-weight: 600;
   border: none;
   border-radius: 12px;

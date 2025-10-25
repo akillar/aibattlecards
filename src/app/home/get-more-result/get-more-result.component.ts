@@ -54,6 +54,9 @@ export class GetMoreResultComponent implements OnInit {
   }
 
   ngOnInit() {
+
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     this.route.params.subscribe(params => {
       this.lookingfortext = params['lookingtext'];
 
@@ -187,7 +190,6 @@ export class GetMoreResultComponent implements OnInit {
       error: (error) => {
         this.isLoading = false;
         this.hasMoreData = false;
-        console.error('❌ Error fetching most viewed products:', error);
       }
     });
   }

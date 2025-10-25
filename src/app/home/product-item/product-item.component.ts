@@ -15,6 +15,7 @@ interface ProductDetails {
   productlicense: string;
   producttechnology: string[];
   productwebsite: string;
+  productdocumentation: string;
   productfundingstage: string;
   productdescription: string;
   userid: string;
@@ -26,6 +27,7 @@ interface ProductDetails {
   baseModels: string[];
   deployments: string[];
   mediaPreviews: string[];
+  repositories: string[];
 }
 
 interface Review {
@@ -421,6 +423,7 @@ toggleReviewForm() {
     this.http.post(this.APIURL + 'get_product_details', payload).subscribe({
       next: (response: any) => {
         if (response.message === "yes") {
+          this.isLoading = true;
           const prod = response.product;
           this.productDetails = {
             productimage: prod.productimage ? `data:image/jpeg;base64,${prod.productimage}` : '../../../assets/images/12.png',
@@ -435,12 +438,15 @@ toggleReviewForm() {
             productfundingstage: prod.productfundingstage || '',
             productfb: prod.productfacebook || '',
             productlinkedin: prod.productlinkedin || '',
+            productdocumentation: prod.productdocumentation || '',
             useCases: response.useCases || [],
             founders: response.founders || [],
             baseModels: response.baseModels || [],
             deployments: response.deployments || [],
-            mediaPreviews: response.mediaPreviews || []
+            mediaPreviews: response.mediaPreviews || [],
+            repositories: response.repositories || [],
           };
+          // console.log('✅ Product details loaded:', this.productDetails);
         } else {
           console.warn("No product found");
           this.showMessage("Product not found", "error");

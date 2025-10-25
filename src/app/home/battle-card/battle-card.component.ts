@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { SmallerProductCardComponent } from '../../widgets/smaller-product-card/smaller-product-card.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ReviewCardComponent } from '../../widgets/review-card/review-card.component';
 import { LoadingComponent } from '../../widgets/loading/loading.component';
+import { Router } from '@angular/router';
 
 interface Tool {
   productimage: string;
@@ -52,9 +53,12 @@ interface Review {
   styleUrl: './battle-card.component.css'
 })
 
-export class BattleCardComponent {
+export class BattleCardComponent implements OnInit{
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router:Router) { }
+  ngOnInit(): void {
+window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   toolsArray: Tool[] = [];
   searchTerm: string = '';
@@ -339,12 +343,9 @@ export class BattleCardComponent {
   }
 
   // Image preview modal methods
-  openImagePreview(imageSrc: string, imageAlt: string) {
-    this.previewImageSrc = imageSrc;
-    this.previewImageAlt = imageAlt;
-    this.imagePreviewModal = true;
-    // Prevent body scroll when modal is open
-    document.body.style.overflow = 'hidden';
+  navigatetoProductScreen(productid: string) {
+    this.router.navigate(['/home/product-item'], { queryParams: { productid } });
+   
   }
 
   closeImagePreview() {

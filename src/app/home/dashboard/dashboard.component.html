@@ -1,32 +1,29 @@
 <div class="getmoreresult">
-    <h2 class="section-title">Featured</h2>
-    <img src="../../../assets/images/getmoreresult.svg" alt="" (click)="getmoreresult('featured')">
+  <h2 class="section-title">Featured</h2>
+  <div class="arrow-wrapper" (click)="getmoreresult('featured')">
+    <img src="../../../assets/images/getmoreresult.svg" alt="More results">
+  </div>
 </div>
-
-
-
 
 <app-product-card-holder [featuredArrayDetails]="featuredArrayDetails"></app-product-card-holder>
 
-
-
 <div class="getmoreresult">
-    <h2 class="section-title">New</h2>
-    <img src="../../../assets/images/getmoreresult.svg" alt="" (click)="getmoreresult('new')">
+  <h2 class="section-title">New</h2>
+  <div class="arrow-wrapper" (click)="getmoreresult('new')">
+    <img src="../../../assets/images/getmoreresult.svg" alt="More results">
+  </div>
 </div>
-
 
 <app-product-card-holder [featuredArrayDetails]="NewArrayDetails"></app-product-card-holder>
 
-
-
 <div class="getmoreresult">
-    <h2 class="section-title">Most Viewed</h2>
-    <img src="../../../assets/images/getmoreresult.svg" alt="" (click)="getmoreresult('mostviewed')">
+  <h2 class="section-title">Most Viewed</h2>
+  <div class="arrow-wrapper" (click)="getmoreresult('mostviewed')">
+    <img src="../../../assets/images/getmoreresult.svg" alt="More results">
+  </div>
 </div>
 
 <app-product-card-holder [featuredArrayDetails]="MostViewedArrayDetails"></app-product-card-holder>
-
 
 <h2 class="section-title">All</h2>
 <app-common-product-list></app-common-product-list>

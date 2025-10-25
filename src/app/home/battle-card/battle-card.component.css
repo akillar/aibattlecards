@@ -41,7 +41,21 @@
   color: #374151;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
+.selecttag-holder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #f9fafc; /* optional soft background */
+}
 
+.tag-heading {
+  font-size: 20px;
+  color: #6b7280; /* soft gray */
+  margin-bottom: 15px;
+  font-weight: 600;
+}
 /* Focus effect */
 .search-bar-products:focus {
   border-color: #3b82f6;
@@ -135,21 +149,7 @@
     transform: translateY(0) scale(1);
   }
 }
-
-/* Top Border Animation */
-.battle-table::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #4a90e2, #357abd, #764ba2);
-  animation: progressBar 1s ease-out 0.3s forwards;
-  transform: scaleX(0);
-  transform-origin: left;
-  z-index: 1;
-}
+ 
 
 @keyframes progressBar {
   to {
@@ -159,7 +159,7 @@
 
 /* Table Headers */
 .battle-table thead {
-  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+ 
   position: relative;
 }
 
@@ -193,13 +193,11 @@
 .battle-table .property-col {
   width: 180px;
   text-align: left;
-  background: linear-gradient(135deg, #4a90e2, #357abd);
-  color: white;
+  color:var(--light-gray-color);
   font-weight: 800;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   font-size: 13px;
-  border-right: 3px solid #357abd;
 }
 
 /* Tool Columns - Equal Width Distribution */
@@ -253,11 +251,7 @@
   }
 }
 
-.battle-table tbody tr:hover {
-  background: linear-gradient(90deg, #f7fafc, #edf2f7);
-  transform: translateX(4px);
-}
-
+ 
 /* Table Cells */
 .battle-table td {
   padding: 18px 16px;
@@ -282,7 +276,7 @@
   text-align: left;
   font-weight: 700;
   color: #2d3748;
-  background: linear-gradient(135deg, #f7fafc, #edf2f7);
+   
   border-right: 3px solid #cbd5e0;
   font-size: 13px;
   text-transform: uppercase;
@@ -290,27 +284,7 @@
   position: relative;
 }
 
-.battle-table .property::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: linear-gradient(180deg, #4a90e2, #357abd);
-}
-
-/* Alternate Row Colors */
-.battle-table tbody tr:nth-child(even) {
-  background: #fafbfc;
-}
-
-.battle-table tbody tr:nth-child(odd) {
-  background: #ffffff;
-}
-
  
-
 
 /* Enhanced Tool Header */
 .tool-header {
@@ -366,34 +340,11 @@
   box-shadow: 0 8px 24px rgba(74, 144, 226, 0.25);
 }
 
-/* Table Body Rows with Staggered Animation */
-.battle-table tbody tr {
-  opacity: 0;
-  transform: translateX(-30px);
-  animation: slideInFromLeft 0.5s ease-out forwards;
-  animation-delay: calc(var(--row-index, 0) * 0.1s + 0.4s);
-  transition: all 0.3s ease;
-}
-
-.battle-table tbody tr:hover {
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-  transform: translateX(0) scale(1.01);
-  box-shadow: 0 4px 16px rgba(74, 144, 226, 0.1);
-}
-
-.battle-table td {
-  padding: 16px 18px;
-  color: #4a5568;
-  font-size: 14px;
-  border-bottom: 1px solid #f0f0f0;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
+ 
 .battle-table .property {
   font-weight: 700;
-  color: white;
-  background: linear-gradient(135deg, #4a90e2, #357abd);
+  color:var(--light-gray-color);
+ 
   text-align: left;
   text-transform: uppercase;
   font-size: 12px;
@@ -421,12 +372,13 @@
   color: #4a90e2;
   text-decoration: none;
   font-weight: 600;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: 8px;
-  transition: all 0.3s ease;
+  transition: all 0.35s ease;
   display: inline-block;
   position: relative;
   overflow: hidden;
+  background: transparent;
 }
 
 .website-link::before {
@@ -437,20 +389,12 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, #4a90e2, #357abd);
-  transition: left 0.3s ease;
+  transition: all 0.4s ease;
   z-index: -1;
+  border-radius: 8px;
 }
 
-.website-link:hover {
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
-}
-
-.website-link:hover::before {
-  left: 0;
-}
-
+ 
 /* Social Links Enhancement */
 .social-links {
   display: flex;
@@ -701,6 +645,7 @@
   flex-direction: column;
 }
 .searchinputwrapper h3 {
+  color: #6b7280;
   margin-bottom: 15px;
 }
 .website-link {
@@ -739,21 +684,7 @@
   color: #6c757d;
   font-style: italic;
 }
-.image-preview-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-  animation: fadeIn 0.3s ease-out;
-  backdrop-filter: blur(8px);
-}
-
+ 
 .image-preview-modal {
   position: relative;
   max-width: 90vw;
