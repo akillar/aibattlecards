@@ -25,6 +25,7 @@
   font-size: 16px;
   border-radius: 30px;
 }
+
 .search-bar-products {
   width: 100%;
   max-width: 380px;
@@ -32,8 +33,7 @@
   font-size: 15px;
   border: 1px solid #d1d5db;
   border-radius: 25px;
-  background: #fff url("../../../assets/images/search.png") no-repeat 12px
-    center;
+  background: #fff url("../../../assets/images/search.png") no-repeat 12px center;
   background-size: 16px;
   outline: none;
   transition: all 0.2s ease-in-out;
@@ -41,21 +41,23 @@
   color: #374151;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
+
 .selecttag-holder {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  background-color: #f9fafc; /* optional soft background */
+  background-color: #f9fafc;
 }
 
 .tag-heading {
   font-size: 20px;
-  color: #6b7280; /* soft gray */
+  color: #6b7280;
   margin-bottom: 15px;
   font-weight: 600;
 }
+
 /* Focus effect */
 .search-bar-products:focus {
   border-color: #3b82f6;
@@ -101,8 +103,6 @@
   background: #f0f4ff;
 }
 
-/* Cards */
-
 /* Make Battle Button */
 .battle-btn {
   background: #4a90e2;
@@ -126,10 +126,11 @@
   transform: scale(1.05);
   box-shadow: 0 6px 18px rgba(74, 144, 226, 0.4);
 }
+
 /* Battle Table Container */
 .battle-table {
   width: 100%;
-  table-layout: fixed; /* This ensures equal column widths */
+  table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
   background: #fff;
@@ -137,29 +138,11 @@
   border-radius: 16px;
   overflow: hidden;
   margin: 30px 0;
-  opacity: 0;
-  transform: translateY(30px) scale(0.95);
-  animation: tablePopIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   position: relative;
-}
-
-@keyframes tablePopIn {
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
- 
-
-@keyframes progressBar {
-  to {
-    transform: scaleX(1);
-  }
 }
 
 /* Table Headers */
 .battle-table thead {
- 
   position: relative;
 }
 
@@ -171,10 +154,6 @@
   border-bottom: 3px solid #cbd5e0;
   border-right: 2px solid #e2e8f0;
   position: relative;
-  opacity: 0;
-  transform: translateY(-20px);
-  animation: slideInFromTop 0.5s ease-out forwards;
-  animation-delay: calc(var(--col-index, 0) * 0.1s + 0.2s);
   vertical-align: middle;
 }
 
@@ -182,18 +161,11 @@
   border-right: none;
 }
 
-@keyframes slideInFromTop {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* Property Column - Fixed Width */
 .battle-table .property-col {
   width: 180px;
   text-align: left;
-  color:var(--light-gray-color);
+  color: var(--light-gray-color);
   font-weight: 800;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -203,7 +175,7 @@
 /* Tool Columns - Equal Width Distribution */
 .battle-table th.tool-col {
   background: white;
-  width: auto; /* Will be divided equally among all tool columns */
+  width: auto;
   border-left: 2px solid #e2e8f0;
 }
 
@@ -238,20 +210,8 @@
 /* Table Body */
 .battle-table tbody tr {
   transition: all 0.3s ease;
-  opacity: 0;
-  transform: translateX(-20px);
-  animation: slideInFromLeft 0.5s ease-out forwards;
-  animation-delay: calc(var(--row-index, 0) * 0.05s + 0.4s);
 }
 
-@keyframes slideInFromLeft {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
- 
 /* Table Cells */
 .battle-table td {
   padding: 18px 16px;
@@ -276,15 +236,12 @@
   text-align: left;
   font-weight: 700;
   color: #2d3748;
-   
   border-right: 3px solid #cbd5e0;
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
   position: relative;
 }
-
- 
 
 /* Enhanced Tool Header */
 .tool-header {
@@ -301,7 +258,7 @@
   object-fit: cover;
   border-radius: 12px;
   border: 2px solid #e2e8f0;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.4s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -326,7 +283,7 @@
   font-size: 10px;
   opacity: 0;
   transform: scale(0);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s ease;
 }
 
 .clickable-image:hover::after {
@@ -340,11 +297,9 @@
   box-shadow: 0 8px 24px rgba(74, 144, 226, 0.25);
 }
 
- 
 .battle-table .property {
   font-weight: 700;
-  color:var(--light-gray-color);
- 
+  color: var(--light-gray-color);
   text-align: left;
   text-transform: uppercase;
   font-size: 12px;
@@ -394,7 +349,6 @@
   border-radius: 8px;
 }
 
- 
 /* Social Links Enhancement */
 .social-links {
   display: flex;
@@ -407,7 +361,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -416,52 +370,6 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Keyframe Animations */
-@keyframes tablePopIn {
-  0% {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(-5px) scale(1.02);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes progressBar {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-@keyframes slideInFromTop {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInFromLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
 .header-tool-img {
   width: 60px;
   height: 60px;
@@ -477,8 +385,6 @@
   cursor: pointer;
 }
 
-/* Hover row effect */
-
 .tool-img {
   width: 30px;
   height: 30px;
@@ -486,6 +392,7 @@
   margin-right: 0.5rem;
   vertical-align: middle;
 }
+
 .filtered-cards-wrapper {
   margin-bottom: 1.5rem;
 }
@@ -495,6 +402,7 @@
   margin-bottom: 0.5rem;
   color: #333;
 }
+
 .separater {
   height: 1px;
   background-color: #c0c0c079;
@@ -502,6 +410,7 @@
   margin-bottom: 15px;
   display: block;
 }
+
 .filtered-cards-container {
   display: flex;
   flex-wrap: wrap;
@@ -556,6 +465,7 @@
   font-size: 12px;
   font-weight: 600;
 }
+
 /* Category Select */
 .select-category {
   appearance: none;
@@ -640,14 +550,17 @@
   border: 1px solid #e5e7eb;
   border-radius: 8px;
 }
+
 .searchinputwrapper {
   display: flex;
   flex-direction: column;
 }
+
 .searchinputwrapper h3 {
   color: #6b7280;
   margin-bottom: 15px;
 }
+
 .website-link {
   color: #0073e6;
   text-decoration: none;
@@ -677,6 +590,7 @@
   transform: scale(1.15);
   filter: brightness(0.85);
 }
+
 .end-of-results {
   grid-column: 1 / -1;
   text-align: center;
@@ -684,7 +598,7 @@
   color: #6c757d;
   font-style: italic;
 }
- 
+
 .image-preview-modal {
   position: relative;
   max-width: 90vw;
@@ -693,7 +607,6 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-  animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transform-origin: center;
 }
 
@@ -737,7 +650,6 @@
   height: auto;
   object-fit: contain;
   display: block;
-  animation: imageZoomIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s both;
 }
 
 .image-caption {
@@ -745,7 +657,6 @@
   background: linear-gradient(135deg, #f8f9fa, #e9ecef);
   text-align: center;
   border-top: 1px solid #dee2e6;
-  animation: slideUp 0.5s ease-out 0.3s both;
 }
 
 .image-caption h4 {
@@ -757,55 +668,6 @@
   letter-spacing: 0.5px;
 }
 
-/* Smooth Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes modalSlideIn {
-  from {
-    opacity: 0;
-    transform: scale(0.6) translateY(-100px) rotate(10deg);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05) translateY(0) rotate(-2deg);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0) rotate(0deg);
-  }
-}
-
-@keyframes imageZoomIn {
-  from {
-    opacity: 0;
-
-    transform: scale(0.7) rotate(5deg);
-    filter: blur(5px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-    filter: blur(0px);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 @media (max-width: 768px) {
   .cards-container app-smaller-product-card {
     flex: 1 1 100%;
