@@ -33,7 +33,8 @@
   font-size: 15px;
   border: 1px solid #d1d5db;
   border-radius: 25px;
-  background: #fff url("../../../assets/images/search.png") no-repeat 12px center;
+  background: #fff url("../../../assets/images/search.png") no-repeat 12px
+    center;
   background-size: 16px;
   outline: none;
   transition: all 0.2s ease-in-out;
@@ -147,7 +148,7 @@
 }
 
 .battle-table th {
-  padding: 20px 16px;
+  padding: 10px;
   text-align: center;
   font-weight: 700;
   color: #2d3748;
@@ -214,7 +215,7 @@
 
 /* Table Cells */
 .battle-table td {
-  padding: 18px 16px;
+  padding: 10px;
   text-align: center;
   border-bottom: 1px solid #e2e8f0;
   border-right: 2px solid #f0f4f8;
@@ -258,7 +259,6 @@
   object-fit: cover;
   border-radius: 12px;
   border: 2px solid #e2e8f0;
-  transition: all 0.4s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -344,7 +344,6 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, #4a90e2, #357abd);
-  transition: all 0.4s ease;
   z-index: -1;
   border-radius: 8px;
 }
@@ -667,7 +666,10 @@
   text-transform: capitalize;
   letter-spacing: 0.5px;
 }
-
+.selectmax3items {
+  margin-top: 10px;
+  font-size: small;
+}
 @media (max-width: 768px) {
   .cards-container app-smaller-product-card {
     flex: 1 1 100%;

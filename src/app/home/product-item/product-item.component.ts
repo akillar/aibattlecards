@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { AuthService } from '../../services/getuserid.service';
 import { LoadingComponent } from '../../widgets/loading/loading.component';
 import { ReviewCardComponent } from '../../widgets/review-card/review-card.component';
+import { ProductItemShimmerComponent } from '../../shimmer/product-item-shimmer/product-item-shimmer.component';
 
 interface ProductDetails {
   productimage: string;
@@ -60,7 +61,7 @@ interface RatingData {
 @Component({
   selector: 'app-product-item',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, LoadingComponent,ReviewCardComponent],
+  imports: [ReactiveFormsModule, CommonModule, ProductItemShimmerComponent,  ReviewCardComponent],
   templateUrl: './product-item.component.html',
   styleUrl: './product-item.component.css'
 })
@@ -136,7 +137,9 @@ currentReviewId: string = '';
     });
   }
 
-
+closeReviewFormModal(): void {
+  this.showReviewForm = false;
+}
   async checkExistingReview(): Promise<void> {
   if (!this.userid || !this.productid) return;
 
@@ -181,6 +184,7 @@ populateFormWithReview(review: any): void {
   
   
   async submitReview(): Promise<void> {
+
   if (this.reviewForm.invalid) {
     this.markFormGroupTouched(this.reviewForm);
     this.showMessage("Please fill in all required fields", "error");
@@ -212,6 +216,7 @@ populateFormWithReview(review: any): void {
 
   this.http.post(this.APIURL + endpoint, payload).subscribe({
     next: (response: any) => {
+
       if (response.message === "added" || response.message === "updated") {
         if (this.productDetails && response.new_rating !== undefined) {
           this.productDetails.rating = response.new_rating;
@@ -227,6 +232,7 @@ populateFormWithReview(review: any): void {
         });
         this.showReviewForm = false;
         this.showPaidRating = false;
+        this.showReviewForm = false;
         
         this.currentOffset = 0;
         this.getReviews(this.productid, 0, true);
@@ -271,7 +277,6 @@ toggleReviewForm() {
 
 
   async getReviews(productid: string, offset: number = 0, reset: boolean = false): Promise<void> {
-      this.isLoading = true;
 
     if (reset) {
     } else {
@@ -286,7 +291,6 @@ toggleReviewForm() {
 
     this.http.post<any>(this.APIURL + 'get_reviews', payload).subscribe({
       next: (response) => {
-        this.isLoading = true;
         if (response.message === "found") {
           if (reset) {
             this.reviews = response.reviews || [];
@@ -311,6 +315,7 @@ toggleReviewForm() {
         if (reset) {
           
         } else {
+          this.isLoading = false;
           this.isLoadingMoreReviews = false;
         }
       },
@@ -320,8 +325,10 @@ toggleReviewForm() {
           
           this.reviews = [];
           this.totalReviews = 0;
+          this.isLoading = false;
           this.hasMoreReviews = false;
         } else {
+          this.isLoading = false;
           this.isLoadingMoreReviews = false;
         }
       }
@@ -367,6 +374,7 @@ toggleReviewForm() {
         this.isCalculatingRating = false;
       },
       error: (error) => {
+        this.isLoading = false
         console.error('❌ Error calculating rating:', error);
         this.isCalculatingRating = false;
         // Set default values on error
@@ -423,7 +431,7 @@ toggleReviewForm() {
     this.http.post(this.APIURL + 'get_product_details', payload).subscribe({
       next: (response: any) => {
         if (response.message === "yes") {
-          this.isLoading = true;
+          this.isLoading = false;
           const prod = response.product;
           this.productDetails = {
             productimage: prod.productimage ? `data:image/jpeg;base64,${prod.productimage}` : '../../../assets/images/12.png',

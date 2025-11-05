@@ -102,7 +102,6 @@ body {
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(3px);
   z-index: 999;
-  animation: fadeInBackdrop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -117,11 +116,10 @@ body {
   z-index: 1000;
   width: 95%;
   max-width: 720px;
-  animation: fadeInPopup 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   transform-origin: center;
 }
-.modal-product-reviews{
-   position: relative;
+.modal-product-reviews {
+  position: relative;
   background: #fff;
   padding: 2rem;
   border-radius: 14px;
@@ -131,7 +129,6 @@ body {
   max-width: 720px;
   height: 90vh;
   overflow-x: scroll;
-  animation: fadeInPopup 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   transform-origin: center;
 }
 .modal-content h3 {
@@ -139,21 +136,18 @@ body {
   font-size: 20px;
   font-weight: 700;
   color: #111827;
-  animation: slideInFromTop 0.6s ease-out 0.2s both;
 }
 
 .modal-content p {
   font-size: 14px;
   color: #4b5563;
   margin-bottom: 1rem;
-  animation: slideInFromLeft 0.6s ease-out 0.3s both;
 }
 
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  animation: slideInFromBottom 0.6s ease-out 0.4s both;
 }
 
 /* Close button animation */
@@ -167,7 +161,6 @@ body {
   padding: 0.5rem;
   border-radius: 50%;
   transition: all 0.3s ease;
-  animation: rotateIn 0.5s ease-out 0.3s both;
 }
 
 .close-btn:hover {
@@ -186,125 +179,6 @@ body {
     hue-rotate(4deg) brightness(96%) contrast(106%);
 }
 
-/* Modal content animations */
-.modal-content {
-  animation: contentFadeIn 0.7s ease-out 0.2s both;
-}
-
-/* Animation Keyframes */
-@keyframes fadeInBackdrop {
-  from {
-    opacity: 0;
-    backdrop-filter: blur(0px);
-  }
-  to {
-    opacity: 1;
-    backdrop-filter: blur(3px);
-  }
-}
-
-@keyframes fadeInPopup {
-  from {
-    opacity: 0;
-    transform: scale(0.7) translateY(-50px);
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05) translateY(0px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-  }
-}
-
-@keyframes slideInFromTop {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInFromLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInFromBottom {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes rotateIn {
-  from {
-    opacity: 0;
-    transform: rotate(-180deg) scale(0);
-  }
-  to {
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-  }
-}
-
-@keyframes contentFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Enhanced modal exit animations (add these classes via JavaScript) */
-.modal-backdrop.closing {
-  animation: fadeOutBackdrop 0.3s ease-out forwards;
-}
-
-.modal.closing {
-  animation: fadeOutPopup 0.3s ease-out forwards;
-}
-
-@keyframes fadeOutBackdrop {
-  from {
-    opacity: 1;
-    backdrop-filter: blur(3px);
-  }
-  to {
-    opacity: 0;
-    backdrop-filter: blur(0px);
-  }
-}
-
-@keyframes fadeOutPopup {
-  from {
-    opacity: 1;
-    transform: scale(1) translateY(0px);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.8) translateY(-30px);
-  }
-}
 /* Delete Confirmation Input */
 .delete-confirm-input {
   margin: 1.2rem 0;
@@ -477,32 +351,6 @@ app-loading {
   z-index: 9999;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes popIn {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-app-loading {
-  position: fixed;
-  top: 70px;
-  left: 0;
-  width: 100%;
-  z-index: 9999; /* ensure it stays on top */
-}
 .backbtn-holder {
   padding: 10px 20px;
   background-color: #f8f9fa;
@@ -635,22 +483,10 @@ app-loading {
   border-radius: 6px;
   display: inline-block;
   border: 1px solid #ddd;
-  animation: fadeInLoadmore 0.4s ease;
 }
 
 .no-more-data span::before {
   content: "✔ ";
   color: #28a745;
   font-weight: bold;
-}
-
-@keyframes fadeInLoadmore {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

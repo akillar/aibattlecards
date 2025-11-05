@@ -266,6 +266,7 @@ private resetProductForm(): void {
     this.resetFormArray('baseModels');
     this.resetFormArray('deployments');
     this.resetFormArray('mediaPreviews');
+    this.resetFormArray('repositories');
     
     // Clear use cases
     this.selectedUseCases = [];
@@ -319,6 +320,7 @@ async getProductDetailsToUpdate(productId: string): Promise<void> {
 
   private populateProductForm(response: any): void {
     const prod = response.product;
+ 
 
     // Patch basic form fields
     this.productAddingForm.patchValue({
@@ -330,6 +332,7 @@ async getProductDetailsToUpdate(productId: string): Promise<void> {
       fundingStage: prod.productfundingstage || '',
       productdescription: prod.productdescription || '',
       productfb: prod.productfacebook || '',
+      documentationlink: prod.productdocumentation || '',
       productlinkedin: prod.productlinkedin || ''
     });
 
@@ -343,6 +346,7 @@ async getProductDetailsToUpdate(productId: string): Promise<void> {
     this.populateFormArray('baseModels', response.baseModels || []);
     this.populateFormArray('deployments', response.deployments || []);
     this.populateFormArray('mediaPreviews', response.mediaPreviews || []);
+    this.populateFormArray('repositories', response.repositories || []);
 
     // Populate use cases
     if (response.useCases && response.useCases.length > 0) {

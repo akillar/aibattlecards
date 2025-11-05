@@ -1,4 +1,4 @@
-<app-loading *ngIf="isLoading"></app-loading>
+<!-- <app-loading *ngIf="isLoading"></app-loading> -->
 
 
 <div class="battle-card-wrapper">
@@ -6,21 +6,21 @@
     <div class="selecttag-holder">
         <h1 class="tag-heading"> Choose the Catgory you want to compaire</h1>
         <select class="select-category" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
-        <option value="" disabled selected>Select a Category</option>
-        <option value="AI model">AI model</option>
-        <option value="Agent">Agent</option>
-        <option value="Voice">Voice</option>
-        <option value="Image">Image</option>
-        <option value="Video Editing">Video Editing</option>
-        <option value="Dev Tools">Dev Tools</option>
-        <option value="Utility">Utility</option>
-    </select>
+            <option value="" disabled selected>Select a Category</option>
+            <option value="AI model">AI model</option>
+            <option value="Agent">Agent</option>
+            <option value="Voice">Voice</option>
+            <option value="Image">Image</option>
+            <option value="Video Editing">Video Editing</option>
+            <option value="Dev Tools">Dev Tools</option>
+            <option value="Utility">Utility</option>
+        </select>
 
     </div>
 
     <!-- Search Input (only show after category selected) -->
     <div class="searchinputwrapper" *ngIf="iscategoryselected">
-        <h3>Select Tools for Battle (max 3)</h3>
+        <h3 class="selectmax3items">Select Tools for Battle (max 3)</h3>
         <input type="text" placeholder="Filter by name..." [(ngModel)]="filterTerm" (input)="onFilterChange()"
             class="search-bar-products">
     </div>
@@ -79,7 +79,7 @@
 
 <!-- Selected tools detailed view -->
 <div *ngIf="selectedTools.length > 0" class="filtered-cards-wrapper">
-    <h3>Selected Tools</h3>
+
 
 
     <!-- Selected Models Section -->
@@ -102,8 +102,7 @@
                 <th *ngFor="let tool of selectedTools" class="tool-col">
                     <div class="tool-header">
                         <img [src]="tool.productimage" [alt]="tool.productname" class="header-tool-img clickable-image"
-                            (click)="navigatetoProductScreen(tool.productid)"
-                            title="Click to enlarge image">
+                            (click)="navigatetoProductScreen(tool.productid)" title="Click to enlarge image">
                     </div>
                 </th>
             </tr>
@@ -138,6 +137,12 @@
             </tr>
 
             <tr>
+                <td class="property">Repositries</td>
+                <td *ngFor="let tool of selectedTools">{{ tool.repositories.join(', ') }}</td>
+            </tr>
+
+
+            <tr>
                 <td class="property">Funding Stage</td>
                 <td *ngFor="let tool of selectedTools">{{ tool.productfundingstage }}</td>
             </tr>
@@ -160,6 +165,16 @@
                     </a>
                 </td>
             </tr>
+
+            <tr>
+                <td class="property">Documentation</td>
+                <td *ngFor="let tool of selectedTools">
+                    <a [href]="tool.productdocumentation" target="_blank" class="website-link">
+                        View Docs
+                    </a>
+                </td>
+            </tr>
+
 
             <tr>
                 <td class="property">Social Links</td>
@@ -185,7 +200,6 @@
         </tbody>
     </table>
 
- 
 
 
 
@@ -199,7 +213,8 @@
 
 
 
-    
+
+
     <!-- Reviews Modal -->
     <div *ngIf="popupSelected.length > 0" class="modal-backdrop">
         <div class="modal-product-reviews">
@@ -212,10 +227,9 @@
                     <h3>Reviews for {{ product.productname }}</h3>
                 </div>
 
-                <!-- Loading indicator for reviews -->
-                <div class="loading-container" *ngIf="isLoading">
-                    <div class="spinner"></div>
-                    <p>Loading reviews...</p>
+                <!-- Shimmer loading for initial reviews -->
+                <div class="review-holder" *ngIf="isLoading">
+                    <app-review-shimmer *ngFor="let item of shimmerArray"></app-review-shimmer>
                 </div>
 
                 <!-- Reviews list -->
@@ -230,16 +244,19 @@
                     <p>Be the first to review this product!</p>
                 </div>
 
+                <!-- Shimmer loading for load more -->
+                <div class="review-holder" *ngIf="isLoadingMoreReviews">
+                    <app-review-shimmer *ngFor="let item of loadMoreShimmerArray"></app-review-shimmer>
+                </div>
+
                 <!-- Load more reviews button -->
-                <div class="load-more-container" *ngIf="hasMoreReviews && !isLoading">
-                    <button class="loadmorebtn" (click)="loadMoreReviews()" [disabled]="isLoadingMoreReviews">
-                        <span *ngIf="!isLoadingMoreReviews">Load More Reviews</span>
-                        <span *ngIf="isLoadingMoreReviews">Loading...</span>
-                        <svg *ngIf="!isLoadingMoreReviews" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
+                <div class="load-more-container" *ngIf="hasMoreReviews && !isLoading && !isLoadingMoreReviews">
+                    <button class="loadmorebtn" (click)="loadMoreReviews()">
+                        <span>Load More Reviews</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <path d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                         </svg>
-                        <div *ngIf="isLoadingMoreReviews" class="loading-spinner"></div>
                     </button>
                     <p class="reviews-counter">Showing {{ reviews.length }} of {{ totalReviews }} reviews</p>
                 </div>

@@ -1,4 +1,4 @@
-<app-loading *ngIf="isLoading"></app-loading>
+<app-product-item-shimmer *ngIf="isLoading"></app-product-item-shimmer>
 
 <div class="product-card">
 
@@ -9,107 +9,115 @@
     </div>
 
     <!-- Slide-down Review Form -->
-    <div class="review-form-container" [class.active]="showReviewForm">
-        <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+    <div class="modal-overlay" *ngIf="showReviewForm" (click)="closeReviewFormModal()">
+        <div class="modal-container" (click)="$event.stopPropagation()">
+            <button class="modal-close-btn" (click)="closeReviewFormModal()">×</button>
 
-            <h2 class="form-title">Submit Your Review</h2>
+            <div class="review-form-wrapper">
+                <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+                    <h2 class="form-title">Submit Your Review</h2>
 
-            <div class="form-group">
-                <label>Are you using commercial/personal ?</label>
-                <div class="radio-group">
-                    <label>
-                        <input type="radio" formControlName="ispaidtogglecommercialorpersonal" value="yes"
-                            (change)="togglecommercialorpersonal(true)" />
-                        Commercial
-                    </label>
-                    <label>
-                        <input type="radio" formControlName="ispaidtogglecommercialorpersonal" value="no"
-                            (change)="togglecommercialorpersonal(false)" />
-                        Personal
-                    </label>
-                </div>
+                    <div class="form-group">
+                        <label>Are you using commercial/personal?</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" formControlName="ispaidtogglecommercialorpersonal" value="yes"
+                                    (change)="togglecommercialorpersonal(true)" />
+                                Commercial
+                            </label>
+                            <label>
+                                <input type="radio" formControlName="ispaidtogglecommercialorpersonal" value="no"
+                                    (change)="togglecommercialorpersonal(false)" />
+                                Personal
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Duration of Usage -->
+                    <div class="form-group">
+                        <label>How long have you been using this?</label>
+                        <select formControlName="usageDuration">
+                            <option value="">Select duration</option>
+                            <option value="1-2 years">1 to 2 years</option>
+                            <option value="2-5 years">2 to 5 years</option>
+                            <option value="5+ years">More than 5 years</option>
+                        </select>
+                    </div>
+
+                    <!-- Experience Rating -->
+                    <div class="form-group">
+                        <label>How is your experience?</label>
+                        <div class="star-rating">
+                            <i *ngFor="let star of ratings" class="star"
+                                [class.filled]="star <= reviewForm.get('experienceRating')?.value"
+                                (click)="setRating('experienceRating', star)">★</i>
+                            <span class="rating-text">{{ reviewForm.get('experienceRating')?.value }}/5</span>
+                        </div>
+                    </div>
+
+                    <!-- Efficiency Rating -->
+                    <div class="form-group">
+                        <label>How is the efficiency of the tool?</label>
+                        <div class="star-rating">
+                            <i *ngFor="let star of ratings" class="star"
+                                [class.filled]="star <= reviewForm.get('efficiencyRating')?.value"
+                                (click)="setRating('efficiencyRating', star)">★</i>
+                            <span class="rating-text">{{ reviewForm.get('efficiencyRating')?.value }}/5</span>
+                        </div>
+                    </div>
+
+                    <!-- Documentation Quality -->
+                    <div class="form-group">
+                        <label>How is the documentation quality?</label>
+                        <div class="star-rating">
+                            <i *ngFor="let star of ratings" class="star"
+                                [class.filled]="star <= reviewForm.get('documentationRating')?.value"
+                                (click)="setRating('documentationRating', star)">★</i>
+                            <span class="rating-text">{{ reviewForm.get('documentationRating')?.value }}/5</span>
+                        </div>
+                    </div>
+
+                    <!-- Paid Version -->
+                    <div class="form-group">
+                        <label>Are you using paid version?</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" formControlName="isPaid" value="yes"
+                                    (change)="togglePaidRating(true)" />
+                                Yes
+                            </label>
+                            <label>
+                                <input type="radio" formControlName="isPaid" value="no"
+                                    (change)="togglePaidRating(false)" />
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" *ngIf="showPaidRating">
+                        <label>How do you rate your paid version?</label>
+                        <div class="star-rating">
+                            <i *ngFor="let star of ratings" class="star"
+                                [class.filled]="star <= reviewForm.get('paidVersionRating')?.value"
+                                (click)="setRating('paidVersionRating', star)">★</i>
+                            <span class="rating-text">{{ reviewForm.get('paidVersionRating')?.value }}/5</span>
+                        </div>
+                    </div>
+
+                    <!-- Additional Comments -->
+                    <div class="form-group">
+                        <label>Other Comments</label>
+                        <textarea formControlName="additionalComments"
+                            placeholder="Add your comments here..."></textarea>
+                    </div>
+
+                    <button type="submit" [disabled]="reviewForm.invalid || isSubmittingReview" class="submit-btn">
+                        {{ isSubmittingReview ? (isEditingReview ? 'Updating...' : 'Submitting...') : (isEditingReview ?
+                        'Update Review' : 'Submit Review') }}
+                    </button>
+                </form>
             </div>
-
-            <!-- Duration of Usage -->
-            <div class="form-group">
-                <label>How long have you been using this?</label>
-                <select formControlName="usageDuration">
-                    <option value="">Select duration</option>
-                    <option value="1-2 years">1 to 2 years</option>
-                    <option value="2-5 years">2 to 5 years</option>
-                    <option value="5+ years">More than 5 years</option>
-                </select>
-            </div>
-
-            <!-- Experience Rating -->
-            <div class="form-group">
-                <label>How is your experience?</label>
-                <div class="star-rating">
-                    <i *ngFor="let star of ratings" class="star"
-                        [class.filled]="star <= reviewForm.get('experienceRating')?.value"
-                        (click)="setRating('experienceRating', star)">★</i>
-                    <span class="rating-text">{{ reviewForm.get('experienceRating')?.value }}/5</span>
-                </div>
-            </div>
-
-            <!-- Efficiency Rating -->
-            <div class="form-group">
-                <label>How is the efficiency of the tool?</label>
-                <div class="star-rating">
-                    <i *ngFor="let star of ratings" class="star"
-                        [class.filled]="star <= reviewForm.get('efficiencyRating')?.value"
-                        (click)="setRating('efficiencyRating', star)">★</i>
-                    <span class="rating-text">{{ reviewForm.get('efficiencyRating')?.value }}/5</span>
-                </div>
-            </div>
-
-            <!-- Documentation Quality -->
-            <div class="form-group">
-                <label>How is the documentation quality?</label>
-                <div class="star-rating">
-                    <i *ngFor="let star of ratings" class="star"
-                        [class.filled]="star <= reviewForm.get('documentationRating')?.value"
-                        (click)="setRating('documentationRating', star)">★</i>
-                    <span class="rating-text">{{ reviewForm.get('documentationRating')?.value }}/5</span>
-                </div>
-            </div>
-
-            <!-- Paid Version -->
-            <div class="form-group">
-                <label>Are you using paid version ?</label>
-                <div class="radio-group">
-                    <label>
-                        <input type="radio" formControlName="isPaid" value="yes" (change)="togglePaidRating(true)" />
-                        Yes
-                    </label>
-                    <label>
-                        <input type="radio" formControlName="isPaid" value="no" (change)="togglePaidRating(false)" />
-                        No
-                    </label>
-                </div>
-            </div>
-
-            <div class="form-group" *ngIf="showPaidRating">
-                <label>How do you rate your paid version?</label>
-                <div class="star-rating">
-                    <i *ngFor="let star of ratings" class="star"
-                        [class.filled]="star <= reviewForm.get('paidVersionRating')?.value"
-                        (click)="setRating('paidVersionRating', star)">★</i>
-                    <span class="rating-text">{{ reviewForm.get('paidVersionRating')?.value }}/5</span>
-                </div>
-            </div>
-
-            <!-- Additional Comments -->
-            <div class="form-group">
-                <label>Other Comments</label>
-                <textarea formControlName="additionalComments" placeholder="Add your comments here..."></textarea>
-            </div>
-
-            <button type="submit" [disabled]="reviewForm.invalid || isSubmittingReview" class="submit-btn">
-                {{ isSubmittingReview ? (isEditingReview ? 'Updating...' : 'Submitting...') : (isEditingReview ? 'Update
-                Review' : 'Submit Review') }}
-            </button>
-        </form>
+        </div>
     </div>
 
 
@@ -173,78 +181,133 @@
         </div>
     </div>
 
-    <div class="details" *ngIf="productDetails">
-        <ul>
-            <li *ngIf="productDetails.useCases.length">
-                <strong>Use Case:</strong>
-                <div class="chip-wrapper">
-                    <span class="chip" *ngFor="let uc of productDetails.useCases">{{ uc }}</span>
+    <div class="details-section" *ngIf="productDetails">
+        <h3 class="section-heading">Product Details</h3>
+
+        <div class="details-list">
+            <!-- Use Cases -->
+            <div class="detail-item" *ngIf="productDetails.useCases.length">
+                <span class="detail-label">Use Cases:</span>
+                <div class="detail-content">
+                    <div class="chip-wrapper">
+                        <span class="chip" *ngFor="let uc of productDetails.useCases">{{ uc }}</span>
+                    </div>
                 </div>
-            </li>
+            </div>
 
-            <li *ngIf="productDetails.founders.length">
-                <strong>Repositories:</strong>
-                <div class="chip-wrapper">
-                    <span class="chip" *ngFor="let f of productDetails.repositories">{{ f }}</span>
+            <!-- Repositories -->
+            <div class="detail-item" *ngIf="productDetails.repositories.length">
+                <span class="detail-label">Repositories:</span>
+                <div class="detail-content">
+                    <div class="chip-wrapper">
+                        <span class="chip" *ngFor="let r of productDetails.repositories">{{ r }}</span>
+                    </div>
                 </div>
-            </li>
+            </div>
 
-            <li *ngIf="productDetails.founders.length">
-                <strong>Founders:</strong>
-                <div class="chip-wrapper">
-                    <span class="chip" *ngFor="let f of productDetails.founders">{{ f }}</span>
+            <!-- Founders -->
+            <div class="detail-item" *ngIf="productDetails.founders.length">
+                <span class="detail-label">Founders:</span>
+                <div class="detail-content">
+                    <div class="chip-wrapper">
+                        <span class="chip" *ngFor="let f of productDetails.founders">{{ f }}</span>
+                    </div>
                 </div>
-            </li>
+            </div>
 
-
-            <li *ngIf="productDetails.producttechnology.length">
-                <strong>Technology:</strong>
-                <div class="chip-wrapper">
-                    <span class="chip" *ngFor="let t of productDetails.producttechnology">{{ t }}</span>
+            <!-- Technology -->
+            <div class="detail-item" *ngIf="productDetails.producttechnology.length">
+                <span class="detail-label">Technology:</span>
+                <div class="detail-content">
+                    <div class="chip-wrapper">
+                        <span class="chip" *ngFor="let t of productDetails.producttechnology">{{ t }}</span>
+                    </div>
                 </div>
-            </li>
+            </div>
 
-            <li *ngIf="productDetails.baseModels.length">
-                <strong>Base AI Model:</strong>
-                <div class="chip-wrapper">
-                    <span class="chip" *ngFor="let b of productDetails.baseModels">{{ b }}</span>
+            <!-- Base AI Model -->
+            <div class="detail-item" *ngIf="productDetails.baseModels.length">
+                <span class="detail-label">Base AI Model:</span>
+                <div class="detail-content">
+                    <div class="chip-wrapper">
+                        <span class="chip" *ngFor="let b of productDetails.baseModels">{{ b }}</span>
+                    </div>
                 </div>
-            </li>
+            </div>
 
-            <li *ngIf="productDetails.deployments.length">
-                <strong>Deployment:</strong>
-                <div class="chip-wrapper">
-                    <span class="chip" *ngFor="let d of productDetails.deployments">{{ d }}</span>
+            <!-- Deployment -->
+            <div class="detail-item" *ngIf="productDetails.deployments.length">
+                <span class="detail-label">Deployment:</span>
+                <div class="detail-content">
+                    <div class="chip-wrapper">
+                        <span class="chip" *ngFor="let d of productDetails.deployments">{{ d }}</span>
+                    </div>
                 </div>
-            </li>
+            </div>
 
-            <li><strong>Funding Stage:</strong> {{ productDetails.productfundingstage }}</li>
-            <li><strong>License:</strong> {{ productDetails.productlicense }}</li>
-            <li><strong>Type:</strong> {{ productDetails.productcategory }}</li>
-            <li><strong>Website:</strong>
-                <a *ngIf="productDetails.productwebsite" [href]="productDetails.productwebsite" target="_blank">Click
-                    Here</a>
-            </li>
+            <!-- Funding Stage -->
+            <div class="detail-item">
+                <span class="detail-label">Funding Stage:</span>
+                <div class="detail-content">
+                    <span class="detail-value">{{ productDetails.productfundingstage }}</span>
+                </div>
+            </div>
 
-            <li><strong>Documentation:</strong>
-                <a *ngIf="productDetails.productdocumentation" [href]="productDetails.productdocumentation" target="_blank">Click
-                    Here</a>
-            </li>
+            <!-- License -->
+            <div class="detail-item">
+                <span class="detail-label">License:</span>
+                <div class="detail-content">
+                    <span class="detail-value">{{ productDetails.productlicense }}</span>
+                </div>
+            </div>
 
-        </ul>
-    </div>
+            <!-- Type -->
+            <div class="detail-item">
+                <span class="detail-label">Type:</span>
+                <div class="detail-content">
+                    <span class="detail-value">{{ productDetails.productcategory }}</span>
+                </div>
+            </div>
 
-    <div class="media-holder" *ngIf="productDetails?.mediaPreviews?.length">
-        <h3 class="mediapreviewtext">Media Previews</h3>
-        <div class="media-icons">
-            <a *ngFor="let m of productDetails?.mediaPreviews" [href]="m.includes('youtube') ? m : null" target="_blank"
-                [style.pointerEvents]="m.includes('youtube') ? 'auto' : 'none'">
-                <img [src]="m.includes('youtube') ? '../../../assets/images/youtube.png' : '../../../assets/images/12.png'"
-                    alt="Preview" class="media-icon" />
-            </a>
+            <!-- Website -->
+            <div class="detail-item">
+                <span class="detail-label">Website:</span>
+                <div class="detail-content">
+                    <a *ngIf="productDetails.productwebsite" [href]="productDetails.productwebsite" target="_blank"
+                        class="detail-link">
+                        {{ productDetails.productwebsite }}
+                    </a>
+                    <span *ngIf="!productDetails.productwebsite" class="detail-value detail-no-data">Not
+                        available</span>
+                </div>
+            </div>
+
+            <!-- Documentation -->
+            <div class="detail-item">
+                <span class="detail-label">Documentation:</span>
+                <div class="detail-content">
+                    <a *ngIf="productDetails.productdocumentation" [href]="productDetails.productdocumentation"
+                        target="_blank" class="detail-link">
+                        {{ productDetails.productdocumentation }}
+                    </a>
+                    <span *ngIf="!productDetails.productdocumentation" class="detail-value detail-no-data">Not
+                        available</span>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- Media Previews Section -->
+    <div class="media-section" *ngIf="productDetails?.mediaPreviews?.length">
+        <h3 class="section-heading">Media Previews</h3>
+        <div class="media-grid">
+            <a *ngFor="let m of productDetails?.mediaPreviews" [href]="m.includes('youtube') ? m : null" target="_blank"
+                [class.disabled-link]="!m.includes('youtube')" class="media-item">
+                <img [src]="m.includes('youtube') ? '../../../assets/images/youtube.png' : '../../../assets/images/12.png'"
+                    alt="Preview" class="media-thumbnail" />
+            </a>
+        </div>
+    </div>
 
 
 

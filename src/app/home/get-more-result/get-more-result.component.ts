@@ -4,15 +4,20 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SmallerProductCardComponent } from '../../widgets/smaller-product-card/smaller-product-card.component';
-import { LoadingComponent } from '../../widgets/loading/loading.component';
 import { GetMoreScreenFeaturedProductStateService } from '../../services/get-more-screen-featured-product-state.service';
 import { GetMoreScreenNewProductStateService } from '../../services/get-more-screen-new-product-state.service';
 import { GetMoreScreenMostViewedProductStateService } from '../../services/get-more-screen-most-viewed-product-state.service';
+import { GetmoreResultShimmerComponent } from '../../shimmer/getmore-result-shimmer/getmore-result-shimmer.component';
 
 @Component({
   selector: 'app-get-more-result',
   standalone: true,
-  imports: [SmallerProductCardComponent, CommonModule, RouterModule, LoadingComponent],
+  imports: [
+    SmallerProductCardComponent, 
+    CommonModule, 
+    RouterModule, 
+    GetmoreResultShimmerComponent
+  ],
   templateUrl: './get-more-result.component.html',
   styleUrl: './get-more-result.component.css'
 })
@@ -31,6 +36,11 @@ export class GetMoreResultComponent implements OnInit {
   pageSize: number = 10;
   hasMoreData: boolean = true;
   isLoading: boolean = false;
+  isLoadingMore: boolean = false;
+
+  // Shimmer arrays
+  initialShimmerArray = Array(15).fill(0); // 15 shimmer cards for initial load
+  loadMoreShimmerArray = Array(10).fill(0); // 10 shimmer cards for load more
 
   constructor(
     private http: HttpClient,
@@ -54,8 +64,6 @@ export class GetMoreResultComponent implements OnInit {
   }
 
   ngOnInit() {
-
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
     this.route.params.subscribe(params => {
       this.lookingfortext = params['lookingtext'];
@@ -106,8 +114,9 @@ export class GetMoreResultComponent implements OnInit {
   }
 
   onLoadMore() {
-    if (this.hasMoreData && !this.isLoading) {
+    if (this.hasMoreData && !this.isLoading && !this.isLoadingMore) {
       this.currentPage++;
+      this.isLoadingMore = true;
       this.loadInitialData();
     }
   }
@@ -124,12 +133,17 @@ export class GetMoreResultComponent implements OnInit {
   }
 
   async getAllProductDetailsFeaturedProducts(): Promise<void> {
-    this.isLoading = true;
+    if (this.currentPage === 1) {
+      this.isLoading = true;
+    }
+    
     const requestBody = { page: this.currentPage, limit: this.pageSize };
 
     this.http.post(this.APIURL + 'get_all_product_details_all_featured', requestBody).subscribe({
       next: (response: any) => {
         this.isLoading = false;
+        this.isLoadingMore = false;
+        
         if (response.message === "yes" && response.products?.length) {
           const newProducts = this.mapProducts(response.products);
           this.featuredArrayDetails = this.mergeUnique(this.featuredArrayDetails, newProducts);
@@ -141,6 +155,7 @@ export class GetMoreResultComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
+        this.isLoadingMore = false;
         this.hasMoreData = false;
         console.error('❌ Error fetching featured products:', error);
       }
@@ -148,12 +163,17 @@ export class GetMoreResultComponent implements OnInit {
   }
 
   async getAllProductDetailsNewProducts(): Promise<void> {
-    this.isLoading = true;
+    if (this.currentPage === 1) {
+      this.isLoading = true;
+    }
+    
     const requestBody = { page: this.currentPage, limit: this.pageSize };
 
     this.http.post(this.APIURL + 'get_all_product_details_all_new', requestBody).subscribe({
       next: (response: any) => {
         this.isLoading = false;
+        this.isLoadingMore = false;
+        
         if (response.message === "yes" && response.products?.length) {
           const newProducts = this.mapProducts(response.products);
           this.NewArrayDetails = this.mergeUnique(this.NewArrayDetails, newProducts);
@@ -165,6 +185,7 @@ export class GetMoreResultComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
+        this.isLoadingMore = false;
         this.hasMoreData = false;
         console.error('❌ Error fetching new products:', error);
       }
@@ -172,12 +193,17 @@ export class GetMoreResultComponent implements OnInit {
   }
 
   async getAllProductDetailsMostViewedProducts(): Promise<void> {
-    this.isLoading = true;
+    if (this.currentPage === 1) {
+      this.isLoading = true;
+    }
+    
     const requestBody = { page: this.currentPage, limit: this.pageSize };
 
     this.http.post(this.APIURL + 'get_all_product_details_all_most_viewed', requestBody).subscribe({
       next: (response: any) => {
         this.isLoading = false;
+        this.isLoadingMore = false;
+        
         if (response.message === "yes" && response.products?.length) {
           const newProducts = this.mapProducts(response.products);
           this.MostViewedArrayDetails = this.mergeUnique(this.MostViewedArrayDetails, newProducts);
@@ -189,6 +215,7 @@ export class GetMoreResultComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
+        this.isLoadingMore = false;
         this.hasMoreData = false;
       }
     });
@@ -200,7 +227,7 @@ export class GetMoreResultComponent implements OnInit {
       productcategory: prod.productcategory,
       productimage: prod.productimage
         ? `data:image/jpeg;base64,${prod.productimage}`
-        : '../../../assets/images/12.png',
+        : 'https://via.placeholder.com/400x400/cccccc/666666?text=Product+Image',
       productusecase: prod.usecasenames && prod.usecasenames.length ? prod.usecasenames : [],
       productid: prod.productid,
       productusecaseid: prod.productusecaseid,

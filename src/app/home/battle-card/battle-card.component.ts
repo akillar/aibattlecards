@@ -4,9 +4,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { ReviewCardComponent } from '../../widgets/review-card/review-card.component';
-import { LoadingComponent } from '../../widgets/loading/loading.component';
+import { ReviewCardComponent } from '../../widgets/review-card/review-card.component'; 
 import { Router } from '@angular/router';
+import { ReviewShimmerComponent } from '../../shimmer/review-shimmer/review-shimmer.component';
 
 interface Tool {
   productimage: string;
@@ -21,7 +21,9 @@ interface Tool {
   productwebsite: string;
   productlinkedin: string;
   productfacebook: string;
+  productdocumentation: string;
   productusecase: string[];
+  repositories: string[];
   showDropdown?: boolean;
   selected?: number;
 }
@@ -48,7 +50,7 @@ interface Review {
 @Component({
   selector: 'app-battle-card',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReviewCardComponent,LoadingComponent],
+  imports: [CommonModule, FormsModule, ReviewCardComponent,ReviewShimmerComponent],
   templateUrl: './battle-card.component.html',
   styleUrl: './battle-card.component.css'
 })
@@ -104,6 +106,9 @@ window.scrollTo({ top: 0, behavior: 'smooth' });
   imagePreviewModal: boolean = false;
   previewImageSrc: string = '';
   previewImageAlt: string = '';
+ shimmerArray = Array(4).fill(0); // Show 5 shimmer cards initially
+  loadMoreShimmerArray = Array(2).fill(0);
+  
 
   openReview(tool: Tool) {
     this.popupSelected = [tool];
@@ -120,9 +125,10 @@ window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
-  async getReviews(productid: string, offset: number = 0, reset: boolean = false): Promise<void> {
+async getReviews(productid: string, offset: number = 0, reset: boolean = false): Promise<void> {
     if (reset) {
       this.isLoading = true;
+      this.reviews = []; // Clear reviews immediately when loading
     } else {
       this.isLoadingMoreReviews = true;
     }
@@ -155,21 +161,18 @@ window.scrollTo({ top: 0, behavior: 'smooth' });
           }
         }
 
-        if (reset) {
-          this.isLoading = false;
-        } else {
-          this.isLoadingMoreReviews = false;
-        }
+        this.isLoading = false;
+        this.isLoadingMoreReviews = false;
       },
       error: (error) => {
         console.error('❌ Error fetching reviews:', error);
+        this.isLoading = false;
+        this.isLoadingMoreReviews = false;
+        
         if (reset) {
-          this.isLoading = false;
           this.reviews = [];
           this.totalReviews = 0;
           this.hasMoreReviews = false;
-        } else {
-          this.isLoadingMoreReviews = false;
         }
       }
     });
@@ -207,7 +210,9 @@ window.scrollTo({ top: 0, behavior: 'smooth' });
             productfacebook: prod.productfacebook,
             productlinkedin: prod.productlinkedin,
             productcategory: prod.productcategory,
+            productdocumentation: prod.productdocumentation,
             productusecase: prod.useCases || [],
+            repositories: prod.repositories || [],
             showDropdown: false
           }));
 

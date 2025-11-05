@@ -1,0 +1,326 @@
+/* Shimmer Container */
+.shimmer-product-card {
+  max-width: 900px;
+  margin: auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 2.5rem;
+}
+
+/* Product Header Shimmer */
+.shimmer-product-header {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.shimmer-product-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  background: #e0e0e0;
+  flex-shrink: 0;
+}
+
+.shimmer-product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.shimmer-title {
+  width: 60%;
+  height: 32px;
+  border-radius: 4px;
+  background: #e0e0e0;
+}
+
+.shimmer-rating {
+  width: 35%;
+  height: 24px;
+  border-radius: 4px;
+  background: #e0e0e0;
+}
+
+.shimmer-description {
+  width: 100%;
+  height: 20px;
+  border-radius: 4px;
+  background: #e0e0e0;
+}
+
+.shimmer-description-short {
+  width: 70%;
+  height: 20px;
+  border-radius: 4px;
+  background: #e0e0e0;
+}
+
+.shimmer-social-icons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.shimmer-social-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e0e0e0;
+}
+
+/* Details Section Shimmer */
+.shimmer-details-section {
+  margin: 2.5rem 0;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.shimmer-section-heading {
+  height: 56px;
+  background: #e0e0e0;
+  margin: 0;
+}
+
+.shimmer-details-list {
+  padding: 0;
+}
+
+.shimmer-detail-item {
+  display: flex;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  gap: 1.5rem;
+}
+
+.shimmer-detail-item:last-child {
+  border-bottom: none;
+}
+
+.shimmer-detail-item:nth-child(even) {
+  background: #fafbfc;
+}
+
+.shimmer-detail-label {
+  min-width: 180px;
+  height: 20px;
+  border-radius: 4px;
+  background: #e0e0e0;
+  flex-shrink: 0;
+}
+
+.shimmer-detail-content {
+  flex: 1;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.shimmer-chip {
+  width: 80px;
+  height: 28px;
+  border-radius: 4px;
+  background: #e0e0e0;
+}
+
+/* Media Section Shimmer */
+.shimmer-media-section {
+  margin: 2.5rem 0;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.shimmer-media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.shimmer-media-item {
+  width: 100%;
+  padding-bottom: 100%;
+  border-radius: 6px;
+  background: #e0e0e0;
+  position: relative;
+}
+
+/* Reviews Section Shimmer */
+.shimmer-reviews-section {
+  margin-top: 3rem;
+}
+
+.shimmer-reviews-header {
+  width: 250px;
+  height: 32px;
+  border-radius: 4px;
+  background: #e0e0e0;
+  margin-bottom: 1.5rem;
+}
+
+.shimmer-review-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.shimmer-review-card {
+  display: flex;
+  gap: 1.25rem;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.shimmer-review-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  flex-shrink: 0;
+}
+
+.shimmer-review-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.shimmer-review-username {
+  width: 150px;
+  height: 20px;
+  border-radius: 4px;
+  background: #e0e0e0;
+}
+
+.shimmer-review-date {
+  width: 100px;
+  height: 16px;
+  border-radius: 4px;
+  background: #e0e0e0;
+}
+
+.shimmer-review-badges {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.shimmer-badge {
+  width: 70px;
+  height: 24px;
+  border-radius: 20px;
+  background: #e0e0e0;
+}
+
+.shimmer-review-text {
+  width: 100%;
+  height: 18px;
+  border-radius: 4px;
+  background: #e0e0e0;
+}
+
+.shimmer-review-text-short {
+  width: 80%;
+  height: 18px;
+  border-radius: 4px;
+  background: #e0e0e0;
+}
+
+/* Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer-animate {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    to right,
+    #e0e0e0 0%,
+    #f0f0f0 20%,
+    #e0e0e0 40%,
+    #e0e0e0 100%
+  );
+  background-size: 1000px 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .shimmer-product-card {
+    padding: 1.5rem;
+  }
+
+  .shimmer-product-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .shimmer-product-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .shimmer-title {
+    width: 80%;
+    height: 28px;
+  }
+
+  .shimmer-rating {
+    width: 50%;
+  }
+
+  .shimmer-detail-item {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .shimmer-detail-label {
+    min-width: auto;
+  }
+
+  .shimmer-media-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .shimmer-review-card {
+    flex-direction: column;
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .shimmer-product-card {
+    padding: 1rem;
+  }
+
+  .shimmer-title {
+    width: 100%;
+    height: 24px;
+  }
+
+  .shimmer-rating {
+    width: 60%;
+  }
+
+  .shimmer-detail-item {
+    padding: 0.875rem 1rem;
+  }
+
+  .shimmer-media-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

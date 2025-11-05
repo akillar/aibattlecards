@@ -1,6 +1,3 @@
-<app-loading *ngIf="isLoading"></app-loading>
-
-
 <div class="backbtn-holder">
   <a routerLink="/" class="backbtn">
     <img src="../../../assets/images/leftarrow.png" alt="Back" class="back-icon">
@@ -8,56 +5,86 @@
   </a>
 </div>
 
-
-
 <!-- Featured Products -->
 <h2 class="section-title" *ngIf="lookingfortext === 'featured'">Featured Products</h2>
 <div class="cards-container" *ngIf="lookingfortext === 'featured'">
-  <ng-container *ngIf="featuredArrayDetails.length > 0; else noFeatured">
-    <app-smaller-product-card *ngFor="let product of featuredArrayDetails" [product]="product" [showDropdown]="false"
-      (productDeleted)="onProductDeleted($event)">
-    </app-smaller-product-card>
+  <!-- Initial Loading Shimmer -->
+  <ng-container *ngIf="isLoading && featuredArrayDetails.length === 0">
+    <app-getmore-result-shimmer *ngFor="let item of initialShimmerArray"></app-getmore-result-shimmer>
   </ng-container>
+
+  <!-- Actual Products -->
+  <ng-container *ngIf="!isLoading || featuredArrayDetails.length > 0">
+    <ng-container *ngIf="featuredArrayDetails.length > 0; else noFeatured">
+      <app-smaller-product-card *ngFor="let product of featuredArrayDetails" [product]="product" [showDropdown]="false"
+        (productDeleted)="onProductDeleted($event)">
+      </app-smaller-product-card>
+    </ng-container>
+  </ng-container>
+
   <ng-template #noFeatured>
-    <div class="empty-message">No featured products available</div>
+    <div class="empty-message" *ngIf="!isLoading">No featured products available</div>
   </ng-template>
 </div>
 
 <!-- New Products -->
 <h2 class="section-title" *ngIf="lookingfortext === 'new'">New Products</h2>
 <div class="cards-container" *ngIf="lookingfortext === 'new'">
-  <ng-container *ngIf="NewArrayDetails.length > 0; else noNew">
-    <app-smaller-product-card *ngFor="let product of NewArrayDetails" [product]="product" [showDropdown]="false"
-      (productDeleted)="onProductDeleted($event)">
-    </app-smaller-product-card>
+  <!-- Initial Loading Shimmer -->
+  <ng-container *ngIf="isLoading && NewArrayDetails.length === 0">
+    <app-getmore-result-shimmer *ngFor="let item of initialShimmerArray"></app-getmore-result-shimmer>
   </ng-container>
+
+  <!-- Actual Products -->
+  <ng-container *ngIf="!isLoading || NewArrayDetails.length > 0">
+    <ng-container *ngIf="NewArrayDetails.length > 0; else noNew">
+      <app-smaller-product-card *ngFor="let product of NewArrayDetails" [product]="product" [showDropdown]="false"
+        (productDeleted)="onProductDeleted($event)">
+      </app-smaller-product-card>
+    </ng-container>
+  </ng-container>
+
   <ng-template #noNew>
-    <div class="empty-message">No new products available</div>
+    <div class="empty-message" *ngIf="!isLoading">No new products available</div>
   </ng-template>
 </div>
 
 <!-- Most Viewed Products -->
 <h2 class="section-title" *ngIf="lookingfortext === 'mostviewed'">Most Viewed Products</h2>
 <div class="cards-container" *ngIf="lookingfortext === 'mostviewed'">
-  <ng-container *ngIf="MostViewedArrayDetails.length > 0; else noMostViewed">
-    <app-smaller-product-card *ngFor="let product of MostViewedArrayDetails" [product]="product" [showDropdown]="false"
-      (productDeleted)="onProductDeleted($event)">
-    </app-smaller-product-card>
+  <!-- Initial Loading Shimmer -->
+  <ng-container *ngIf="isLoading && MostViewedArrayDetails.length === 0">
+    <app-getmore-result-shimmer *ngFor="let item of initialShimmerArray"></app-getmore-result-shimmer>
   </ng-container>
+
+  <!-- Actual Products -->
+  <ng-container *ngIf="!isLoading || MostViewedArrayDetails.length > 0">
+    <ng-container *ngIf="MostViewedArrayDetails.length > 0; else noMostViewed">
+      <app-smaller-product-card *ngFor="let product of MostViewedArrayDetails" [product]="product"
+        [showDropdown]="false" (productDeleted)="onProductDeleted($event)">
+      </app-smaller-product-card>
+    </ng-container>
+  </ng-container>
+
   <ng-template #noMostViewed>
-    <div class="empty-message">No most viewed products available</div>
+    <div class="empty-message" *ngIf="!isLoading">No most viewed products available</div>
   </ng-template>
 </div>
 
+<!-- Load More Shimmer -->
+<div class="cards-container" *ngIf="isLoadingMore">
+  <app-getmore-result-shimmer *ngFor="let item of loadMoreShimmerArray"></app-getmore-result-shimmer>
+</div>
+
 <!-- Load More Button -->
-<div class="load-more-container" *ngIf="hasMoreData || isLoading">
-  <button class="loadmorebtn" *ngIf="!isLoading" (click)="onLoadMore()">
+<div class="load-more-container" *ngIf="hasMoreData && !isLoading && !isLoadingMore">
+  <button class="loadmorebtn" (click)="onLoadMore()">
     Load more
   </button>
 </div>
 
 <!-- No more data message -->
 <div class="no-more-data"
-  *ngIf="!hasMoreData && !isLoading && (featuredArrayDetails.length > 0 || NewArrayDetails.length > 0 || MostViewedArrayDetails.length > 0)">
+  *ngIf="!hasMoreData && !isLoading && !isLoadingMore && (featuredArrayDetails.length > 0 || NewArrayDetails.length > 0 || MostViewedArrayDetails.length > 0)">
   <span>No more products to load</span>
 </div>

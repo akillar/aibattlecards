@@ -1,0 +1,155 @@
+.shimmer-product-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  min-height: 280px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.shimmer-dotmenu {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: #e0e0e0;
+}
+
+.shimmer-product-icon {
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+  background: #e0e0e0;
+  margin-top: 0.5rem;
+}
+
+.shimmer-product-name {
+  width: 80%;
+  height: 24px;
+  border-radius: 6px;
+  background: #e0e0e0;
+}
+
+.shimmer-product-type {
+  width: 65%;
+  height: 18px;
+  border-radius: 4px;
+  background: #e0e0e0;
+}
+
+.shimmer-chip-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.shimmer-chip {
+  width: 70px;
+  height: 28px;
+  border-radius: 14px;
+  background: #e0e0e0;
+}
+
+/* Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer-animate {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    90deg,
+    #e0e0e0 0%,
+    #f5f5f5 25%,
+    #e0e0e0 50%,
+    #f5f5f5 75%,
+    #e0e0e0 100%
+  );
+  background-size: 2000px 100%;
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.shimmer-product-card {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .shimmer-product-card {
+    min-height: 260px;
+  }
+
+  .shimmer-product-icon {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .shimmer-product-card {
+    padding: 1.25rem;
+    min-height: 240px;
+  }
+
+  .shimmer-product-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  .shimmer-chip {
+    width: 60px;
+    height: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .shimmer-product-card {
+    padding: 1rem;
+    min-height: 220px;
+  }
+
+  .shimmer-product-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .shimmer-product-name {
+    width: 90%;
+    height: 20px;
+  }
+
+  .shimmer-product-type {
+    width: 75%;
+    height: 16px;
+  }
+
+  .shimmer-chip {
+    width: 55px;
+    height: 24px;
+  }
+}
