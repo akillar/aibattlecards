@@ -5,13 +5,10 @@
   color: #333;
 }
 
-
-
 .getmoreresult {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
   padding: 0 6px;
 }
 

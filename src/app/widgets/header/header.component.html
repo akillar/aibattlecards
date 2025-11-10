@@ -1,50 +1,105 @@
+<!-- Header Section -->
 <div class="header-holder">
-    <!-- Left Logo -->
-    <!-- <img src="../../../assets/images/12.png" alt="logo" class="logo"> -->
     <a routerLink="/"><img src="../../../assets/images/logo.png" alt="logo" class="logo"></a>
 
 
-    <!-- Search Bar (centered) -->
-    <app-search-bar></app-search-bar>
+    <!-- Tabs inside header -->
+    <div class="right-content-holder">
 
-    <div class="auth-function-holder">
-        <a routerLink="/home/battle-card" class="vs-btn">Vs</a>
+        <app-search-bar></app-search-bar>
 
-        <a routerLink="/auth/sign-up" *ngIf="!isuserloggedin">Sign Up</a>
-        <a routerLink="/auth/log-in" *ngIf="!isuserloggedin">Log in</a>
-        <div class="profile-wrapper" (click)="toggleDropdown()" *ngIf="isuserloggedin">
-            <div class="profile-avatar">
-                {{ userInitials }}
-            </div>
 
-            <div class="profile-dropdown" *ngIf="dropdownOpen">
-                <ul>
-                    <li><a routerLink="/home/user-profile">Profile</a></li>
-                    <li><a (click)="showlogoutpopup($event)">Logout</a></li>
-                </ul>
+        <div class="tabs-container">
+            <button class="tab-btn" *ngFor="let tab of tabs" [ngClass]="{'active-tab': activeTab === tab.key}"
+                (click)="toggleTab(tab.key)">
+                {{ tab.label }}
+                <span class="dropdown-arrow" [ngClass]="{'arrow-up': activeTab === tab.key}">▼</span>
+            </button>
+        </div>
+
+        <div class="auth-function-holder">
+            <a routerLink="/home/battle-card" class="vs-btn">Vs</a>
+            <a routerLink="/auth/sign-up" *ngIf="!isuserloggedin">Sign Up</a>
+            <a routerLink="/auth/log-in" *ngIf="!isuserloggedin">Log in</a>
+
+            <div class="profile-wrapper" *ngIf="isuserloggedin" (click)="toggleDropdown()">
+                <div class="profile-avatar">{{ userInitials }}</div>
+                <div class="profile-dropdown" *ngIf="dropdownOpen">
+                    <ul>
+                        <li><a routerLink="/home/user-profile">Profile</a></li>
+                        <li><a (click)="showLogoutConfirm = true">Logout</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Profile Section -->
-
 </div>
 
+<!-- Tab Dropdown Overlay -->
+<div class="tab-dropdown-overlay" *ngIf="activeTab" [@slideDown] (click)="closeDropdown()">
+    <div class="tab-dropdown-container" (click)="$event.stopPropagation()">
+        <div class="tab-dropdown-content">
+            <!-- Categories Dropdown -->
+            <div *ngIf="activeTab === 'categories'">
+                <div class="dropdown-grid">
+                    <a *ngFor="let category of categories.slice(0, showAllCategories ? categories.length : 6)"
+                        [routerLink]="['/home/category', category, 'category']" class="dropdown-item"
+                        (click)="closeDropdown()">
+                        <span>{{ category }}</span>
+                        <img src="../../../assets/images/rightarrow.png" alt="arrow" class="arrow-icon">
+                    </a>
+                </div>
+                <button *ngIf="categories.length > 6" class="see-more-btn" (click)="toggleShowAll('categories')">
+                    {{ showAllCategories ? 'Show Less' : 'See More' }}
+                    <span class="btn-arrow">{{ showAllCategories ? '▲' : '▼' }}</span>
+                </button>
+            </div>
 
+            <!-- Use Cases Dropdown -->
+            <div *ngIf="activeTab === 'usecases'">
+                <div class="dropdown-grid">
+                    <a *ngFor="let useCase of useCases.slice(0, showAllUseCases ? useCases.length : 6)"
+                        [routerLink]="['/home/category', useCase.route, useCase.type]" class="dropdown-item"
+                        (click)="closeDropdown()">
+                        <span>{{ useCase.name }}</span>
+                    </a>
+                </div>
+                <button *ngIf="useCases.length > 6" class="see-more-btn" (click)="toggleShowAll('usecases')">
+                    {{ showAllUseCases ? 'Show Less' : 'See More' }}
+                    <span class="btn-arrow">{{ showAllUseCases ? '▲' : '▼' }}</span>
+                </button>
+            </div>
+
+            <!-- Technology Dropdown -->
+            <div *ngIf="activeTab === 'technology'">
+                <div class="dropdown-grid">
+                    <a *ngFor="let tech of technologies.slice(0, showAllTechnologies ? technologies.length : 6)"
+                        [routerLink]="['/home/category', tech.route, tech.type]" class="dropdown-item"
+                        (click)="closeDropdown()">
+                        <span>{{ tech.name }}</span>
+                    </a>
+                </div>
+                <button *ngIf="technologies.length > 6" class="see-more-btn" (click)="toggleShowAll('technology')">
+                    {{ showAllTechnologies ? 'Show Less' : 'See More' }}
+                    <span class="btn-arrow">{{ showAllTechnologies ? '▲' : '▼' }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Logout Modal -->
 <div class="modal-backdrop" *ngIf="showLogoutConfirm" (click)="showLogoutConfirm = false">
-
-    <div class="modal" *ngIf="showLogoutConfirm" (click)="$event.stopPropagation()">
+    <div class="modal" (click)="$event.stopPropagation()">
         <div class="modal-content">
             <h3 class="modal-title">Are you sure?</h3>
             <p class="modal-warning">
                 Do you really want to log out of your account? You will need to log in again to access your data.
             </p>
-
             <div class="modal-actions">
                 <button class="cancel-btn" (click)="showLogoutConfirm = false">Cancel</button>
                 <button class="confirm-btn" (click)="onLogout()">Yes, Log Out</button>
             </div>
         </div>
     </div>
-
 </div>

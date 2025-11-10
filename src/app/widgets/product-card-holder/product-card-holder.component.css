@@ -1,12 +1,11 @@
 .featured-container {
-  margin: 1.5rem 0;
-  padding: 0 1.5rem;
+  margin: 1.1rem 0;
   max-width: 100%;
   overflow-x: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
   border-radius: 20px;
-  padding: 1.5rem;
+  padding: 0px 1.5rem;
   transition: all 0.3s ease;
 }
 
@@ -22,8 +21,8 @@
   gap: 1.25rem;
   overflow-x: auto;
   overflow-y: hidden;
+  padding: 5px 0px;
   scroll-behavior: smooth;
-  padding: 1rem 0.5rem;
   transition: transform 0.3s ease;
 }
 
@@ -36,7 +35,6 @@
   background: #fff;
   border-radius: 20px;
   padding: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   flex-shrink: 0;
   border: 2px solid #f5f7fa;
   position: relative;
@@ -45,7 +43,6 @@
 }
 
 .product-card:hover {
-  transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(67, 56, 202, 0.15);
   border-color: #e0e7ff;
 }

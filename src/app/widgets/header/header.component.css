@@ -1,29 +1,29 @@
+/* Header */
+.right-content-holder {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
 .header-holder {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1.5rem;
+  padding: 0.8rem 1.5rem;
   background: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
   z-index: 100;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
-/* Logo */
 .logo {
   width: 40px;
   height: 40px;
   object-fit: contain;
 }
 
-/* Search Bar */
-app-search-bar {
-  min-width: 550px;
-}
-
-/* Auth links */
 .auth-function-holder {
   display: flex;
   gap: 1rem;
@@ -34,103 +34,32 @@ app-search-bar {
   text-decoration: none;
   color: #333;
   font-weight: 500;
-  /* transition: color 0.35s ease-in-out; */
 }
-
 .auth-function-holder a:hover {
   color: #4a90e2;
 }
 
-/* VS Button */
 .vs-btn {
-  background: linear-gradient(
-    100deg,
-    rgba(90, 103, 216, 1) 20%,
-    rgba(255, 75, 43, 1) 100%
-  );
+  background: linear-gradient(100deg, #5a67d8 20%, #ff4b2b 100%);
   color: #fff !important;
   padding: 0.5rem 1rem;
-  font-weight: 600;
   border-radius: 25px;
-  text-decoration: none;
-  font-size: 14px;
+  font-weight: 600;
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 40px;
   height: 40px;
-  justify-content: center;
-
-  /* Make gradient smooth */
-  background-size: 200% 200%;
-  background-position: 0% 50%;
-  transition: all 0.3s ease, background-position 0.5s ease;
+  transition: all 0.3s ease;
 }
-
 .vs-btn:hover {
-  box-shadow: 0 8px 20px #5a67d8;
-  /* Animate gradient */
-  background-position: 100% 50%;
+  box-shadow: 0 8px 20px rgba(90, 103, 216, 0.4);
 }
 
-/* Profile wrapper */
+/* Profile */
 .profile-wrapper {
   position: relative;
   cursor: pointer;
-}
-
-.profile-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 2px solid #eee;
-  transition: border 0.3s, transform 0.3s;
-}
-
-.profile-wrapper:hover .profile-icon {
-  border-color: #4a90e2;
-  transform: scale(1.05);
-}
-
-/* Dropdown menu */
-.profile-dropdown {
-  position: absolute;
-  right: 0;
-  top: 50px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  padding: 0.5rem 0;
-  width: 180px;
-  animation: fadeIn 0.25s ease;
-  z-index: 200;
-}
-
-.profile-dropdown ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.profile-dropdown li {
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.profile-dropdown li:last-child {
-  border-bottom: none;
-}
-
-.profile-dropdown a {
-  display: block;
-  padding: 0.7rem 1rem;
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-  transition: background 0.3s, color 0.3s;
-}
-
-.profile-dropdown a:hover {
-  background: #f0f4ff;
-  color: #4a90e2;
 }
 .profile-avatar {
   width: 40px;
@@ -144,16 +73,249 @@ app-search-bar {
   font-weight: bold;
   font-size: 14px;
   text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  user-select: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 50px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 0.5rem 0;
+  width: 180px;
+  animation: fadeIn 0.25s ease;
+  z-index: 200;
+}
+.profile-dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.profile-dropdown li {
+  margin: 0;
+}
+.profile-dropdown a {
+  display: block;
+  padding: 0.6rem 1rem;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.profile-dropdown a:hover {
+  background: #f0f4ff;
+  color: #4a90e2;
 }
 
-.profile-avatar:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+/* Tabs */
+.tabs-container {
+  display: flex;
+  gap: 0.8rem;
+  margin: 0.5rem 0;
+  flex-wrap: wrap;
+}
+.tab-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  background-color: transparent;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  gap: 0.5rem;
+}
+.tab-btn:hover {
+  background: #e0e0e0;
+}
+.active-tab {
+  background: #4a90e2;
+  color: #fff;
 }
 
+.dropdown-arrow {
+  font-size: 10px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+.arrow-up {
+  transform: rotate(180deg);
+}
+
+/* Tab Dropdown Overlay - Positioned Absolutely */
+.tab-dropdown-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 98;
+  animation: fadeInOverlay 0.3s ease;
+}
+
+.tab-dropdown-container {
+  background: #fff;
+  margin: 73px 0px 0px auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  max-width: 600px;
+  width: 90%;
+  z-index: 99;
+}
+
+.tab-dropdown-content {
+  padding: 1.5rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Custom Scrollbar */
+.tab-dropdown-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tab-dropdown-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.tab-dropdown-content::-webkit-scrollbar-thumb {
+  background: #4a90e2;
+  border-radius: 10px;
+}
+
+.tab-dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #357abd;
+}
+
+/* 2x2 Grid Layout */
+.dropdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.dropdown-item {
+  text-decoration: none;
+  color: #333;
+  padding: 1rem;
+  border-radius: 10px;
+  background: #f7f9fc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border: 2px solid transparent;
+}
+
+.dropdown-item:hover {
+  border-color: #357abd;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.arrow-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+  transition: all 0.3s;
+}
+
+.dropdown-item:hover .arrow-icon {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+/* See More Button */
+.see-more-btn {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid #4a90e2;
+  background: transparent;
+  color: #4a90e2;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.see-more-btn:hover {
+  background: #4a90e2;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.btn-arrow {
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+}
+.modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.2rem;
+  width: 350px;
+  max-width: 90%;
+}
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.modal-warning {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 1rem;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+.cancel-btn,
+.confirm-btn {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+.cancel-btn {
+  background: #f0f0f0;
+  color: #333;
+}
+.cancel-btn:hover {
+  background: #e0e0e0;
+}
+.confirm-btn {
+  background: #4a90e2;
+  color: #fff;
+}
+.confirm-btn:hover {
+  background: #357abd;
+}
+
+/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -162,5 +324,48 @@ app-search-bar {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dropdown-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tab-dropdown-container {
+    width: 95%;
+    max-width: none;
+  }
+
+  .tab-dropdown-content {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdown-item {
+    padding: 0.8rem;
+    font-size: 14px;
   }
 }

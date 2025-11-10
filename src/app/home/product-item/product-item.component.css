@@ -4,7 +4,6 @@
   margin: auto;
   background: var(--card-bg);
   border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
   padding: 2.5rem;
   transition: all 0.3s ease;
   position: relative;
