@@ -52,9 +52,9 @@
         </div>
 
         <!-- End of results indicator -->
-        <div class="end-of-results" *ngIf="!hasMoreTools && displayedTypeTools.length > 0">
+        <!-- <div class="end-of-results" *ngIf="!hasMoreTools && displayedTypeTools.length > 0">
             <p>You've reached the end of results</p>
-        </div>
+        </div> -->
     </div>
 
     <!-- No items template -->
@@ -194,7 +194,11 @@
             <tr>
                 <td class="property">Reviews</td>
                 <td *ngFor="let tool of selectedTools">
-                    <button class="website-link" (click)="openReview(tool)">See Reviews</button>
+                    <button class="website-link" (click)="openReview(tool)">
+                        See Reviews 
+                        <span *ngIf="tool.reviewCount !== undefined">({{ tool.reviewCount }})</span>
+                        <span *ngIf="tool.reviewCount === undefined">(...)</span>
+                    </button>
                 </td>
             </tr>
         </tbody>

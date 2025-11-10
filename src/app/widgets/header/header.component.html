@@ -46,7 +46,6 @@
                         [routerLink]="['/home/category', category, 'category']" class="dropdown-item"
                         (click)="closeDropdown()">
                         <span>{{ category }}</span>
-                        <img src="../../../assets/images/rightarrow.png" alt="arrow" class="arrow-icon">
                     </a>
                 </div>
                 <button *ngIf="categories.length > 6" class="see-more-btn" (click)="toggleShowAll('categories')">

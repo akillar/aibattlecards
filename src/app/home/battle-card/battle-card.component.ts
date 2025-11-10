@@ -26,6 +26,7 @@ interface Tool {
   repositories: string[];
   showDropdown?: boolean;
   selected?: number;
+  reviewCount?: number;
 }
 
 interface Review {
@@ -294,27 +295,64 @@ async getReviews(productid: string, offset: number = 0, reset: boolean = false):
     this.loadInitialTools();
   }
 
-  toggleSelect(tool: Tool) {
-    const index = this.selectedTools.findIndex(t => t.productname === tool.productname);
+ toggleSelect(tool: Tool) {
+  const index = this.selectedTools.findIndex(t => t.productname === tool.productname);
 
-    if (index > -1) {
-      this.selectedTools.splice(index, 1);
-    } else {
-      if (this.selectedTools.length < 3) {
-        this.selectedTools.push(tool);
-      }
+  if (index > -1) {
+    this.selectedTools.splice(index, 1);
+  } else {
+    if (this.selectedTools.length < 3) {
+      this.selectedTools.push(tool);
     }
-
-    this.selectedTools.forEach((t, i) => t.selected = i + 1);
-
-    this.displayedTypeTools.forEach(t => {
-      if (!this.selectedTools.includes(t)) {
-        t.selected = undefined;
-      }
-    });
-
-    this.updateDisplayedSelectedTools();
   }
+
+  this.selectedTools.forEach((t, i) => t.selected = i + 1);
+
+  this.displayedTypeTools.forEach(t => {
+    if (!this.selectedTools.includes(t)) {
+      t.selected = undefined;
+    }
+  });
+
+  this.updateDisplayedSelectedTools();
+  
+  // ADD THIS LINE - Fetch review counts after selection changes
+  this.getReviewCountsForSelected();
+}
+
+
+// Add this method to your component
+async getReviewCountsForSelected(): Promise<void> {
+  if (this.selectedTools.length === 0) return;
+
+  const productIds = this.selectedTools.map(tool => tool.productid);
+  const payload = { product_ids: productIds };
+
+  this.http.post<any>(this.APIURL + 'product_comparison_review_count', payload).subscribe({
+    next: (response) => {
+      if (response.message === "success" && response.review_counts) {
+        // Update review counts for selected tools
+        response.review_counts.forEach((item: any) => {
+          const tool = this.selectedTools.find(t => t.productid === item.productid);
+          if (tool) {
+            tool.reviewCount = item.count;
+          }
+        });
+      }
+    },
+    error: (error) => {
+      console.error('❌ Error fetching review counts:', error);
+      // Set default count to 0 if error
+      this.selectedTools.forEach(tool => {
+        if (tool.reviewCount === undefined) {
+          tool.reviewCount = 0;
+        }
+      });
+    }
+  });
+}
+
+
 
   resetSelections() {
     this.selectedTools = [];
@@ -368,11 +406,5 @@ async getReviews(productid: string, offset: number = 0, reset: boolean = false):
       // this.filteredTools = [];
     }
   }
-
-  @HostListener('document:keydown.escape', ['$event'])
-  handleEscapeKey(event: KeyboardEvent) {
-    if (this.imagePreviewModal) {
-      this.closeImagePreview();
-    }
-  }
+ 
 }
