@@ -136,7 +136,19 @@ currentReviewId: string = '';
       
     });
   }
-
+  handleReviewDeleted(reviewid: string) {
+  // Remove the deleted review from the array
+  this.reviews = this.reviews.filter(review => review.reviewid !== reviewid);
+  this.totalReviews--;
+  
+  // Show success message
+  this.showMessage('Review deleted successfully', 'success');
+  
+  // Recalculate ratings
+  if (this.productid) {
+    this.calculateProductRating(this.productid);
+  }
+}
 closeReviewFormModal(): void {
   this.showReviewForm = false;
 }

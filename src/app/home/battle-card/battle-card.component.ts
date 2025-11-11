@@ -125,7 +125,10 @@ window.scrollTo({ top: 0, behavior: 'smooth' });
       this.getReviews(this.currentProductId, this.currentOffset, false);
     }
   }
-
+handleReviewDeleted(reviewid: string) {
+  this.reviews = this.reviews.filter(review => review.reviewid !== reviewid);
+  this.totalReviews--;
+}
 async getReviews(productid: string, offset: number = 0, reset: boolean = false): Promise<void> {
     if (reset) {
       this.isLoading = true;

@@ -195,7 +195,7 @@
                 <td class="property">Reviews</td>
                 <td *ngFor="let tool of selectedTools">
                     <button class="website-link" (click)="openReview(tool)">
-                        See Reviews 
+                        See Reviews
                         <span *ngIf="tool.reviewCount !== undefined">({{ tool.reviewCount }})</span>
                         <span *ngIf="tool.reviewCount === undefined">(...)</span>
                     </button>
@@ -238,7 +238,9 @@
 
                 <!-- Reviews list -->
                 <div class="review-holder" *ngIf="reviews.length > 0 && !isLoading">
-                    <app-review-card *ngFor="let review of reviews" [review]="review"></app-review-card>
+                    <app-review-card *ngFor="let review of reviews" [review]="review"
+                        (reviewDeleted)="handleReviewDeleted($event)">
+                    </app-review-card>
                 </div>
 
                 <!-- No reviews message -->
