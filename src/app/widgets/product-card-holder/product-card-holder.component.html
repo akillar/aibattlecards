@@ -8,10 +8,18 @@
         <!-- Cards Container -->
         <div class="cards-container" #cardContainer>
             <div class="product-card" *ngFor="let product of featuredArrayDetails" [routerLink]="['/home/product-item']"
-                [queryParams]="{ productid: product.productid }">
-                <div class="product-icon">
-                    <img [src]="product.icon" alt="icon" />
+                [queryParams]="{ productid: product.productid }" [class.featured-product]="product.isFeatured === 1">
+
+                <div class="product-icon-wrapper">
+                    <div class="product-icon">
+                        <img [src]="product.icon" alt="icon" />
+                    </div>
+
+                    <div class="featured-ribbon" *ngIf="product.isFeatured === 1">
+                        <span class="featured-text">Featured</span>
+                    </div>
                 </div>
+
                 <h3 class="product-name">{{ product.name }}</h3>
                 <p class="product-type">
                     <span>Type</span> {{ product.type }}

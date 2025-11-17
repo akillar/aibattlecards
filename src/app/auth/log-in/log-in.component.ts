@@ -49,7 +49,11 @@ formData.append("password", password);
         this.showMessage('No user found with this email.');
       } else if (response.message === "Invalid email or password") {
         this.showMessage('Incorrect password. Please try again.');
-      } else if (response.message === "Login successful") {
+      }  else if (response.message === "Your account has been disabled") {
+        this.showMessage('Your account has been disabled.');
+      } 
+        
+      else if (response.message === "Login successful") {
         this.route.navigate(['/home/dashboard']);
         sessionStorage.setItem('userid', response.userid);
         

@@ -1,13 +1,13 @@
 <div class="product-card" [routerLink]="['/home/product-item']" [queryParams]="{ productid: product.productid }"
     routerLinkActive="active-card">
-    <img src="../../../assets/images/dotmenu.svg" alt="Menu" class="dotmenu" (click)="toggleDropdown($event)">
+    <img src="../../../assets/images/dotmenu.svg" alt="Menu" class="dotmenu" (click)="toggleDropdown($event)"
+        *ngIf="product.userid == userid">
     <!-- *ngIf="product.productid == userid" -->
     <div class="dotmenudropdown" *ngIf="product.showDropdown">
         <ul>
-            <li (click)="UpdateProduct(product, $event)" *ngIf="product.userid == userid">Edit </li>
-            <li (click)="confirmDelete(product, $event)" *ngIf="product.userid == userid">Delete </li>
+            <li (click)="UpdateProduct(product, $event)">Edit </li>
+            <li (click)="confirmDelete(product, $event)">Delete </li>
 
-            <li>More </li>
 
         </ul>
     </div>

@@ -70,10 +70,10 @@
             </span>
 
             <!-- No More Products Message -->
-            <div *ngIf="!hasMoreUserProducts && !isLoadingUserProducts && toolsArray.length > 0 && !isaddingnewproduct"
+            <!-- <div *ngIf="!hasMoreUserProducts && !isLoadingUserProducts && toolsArray.length > 0 && !isaddingnewproduct"
                 class="no-more-data">
                 <span>No more products to load</span>
-            </div>
+            </div> -->
 
 
 
@@ -92,7 +92,7 @@
 
                 <form [formGroup]="productAddingForm" (ngSubmit)="onSubmitProduct()" class="new-product-form">
                     <img [src]="selectedImage || '../../../assets/images/12.png'" alt="Product Image"
-                        class="profile-image" />
+                        class="profile-image" *ngIf="selectedImage" />
 
                     <div class="form-group">
                         <label>Product Image</label>

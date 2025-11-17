@@ -43,9 +43,9 @@
             <div *ngIf="activeTab === 'categories'">
                 <div class="dropdown-grid">
                     <a *ngFor="let category of categories.slice(0, showAllCategories ? categories.length : 6)"
-                        [routerLink]="['/home/category', category, 'category']" class="dropdown-item"
+                        [routerLink]="['/home/category', category.categoryName, 'category']" class="dropdown-item"
                         (click)="closeDropdown()">
-                        <span>{{ category }}</span>
+                        <span>{{ category.categoryName }}</span>
                     </a>
                 </div>
                 <button *ngIf="categories.length > 6" class="see-more-btn" (click)="toggleShowAll('categories')">
@@ -58,9 +58,9 @@
             <div *ngIf="activeTab === 'usecases'">
                 <div class="dropdown-grid">
                     <a *ngFor="let useCase of useCases.slice(0, showAllUseCases ? useCases.length : 6)"
-                        [routerLink]="['/home/category', useCase.route, useCase.type]" class="dropdown-item"
+                        [routerLink]="['/home/category', useCase.usecaseName, 'usecase']" class="dropdown-item"
                         (click)="closeDropdown()">
-                        <span>{{ useCase.name }}</span>
+                        <span>{{ useCase.usecaseName }}</span>
                     </a>
                 </div>
                 <button *ngIf="useCases.length > 6" class="see-more-btn" (click)="toggleShowAll('usecases')">
@@ -73,9 +73,9 @@
             <div *ngIf="activeTab === 'technology'">
                 <div class="dropdown-grid">
                     <a *ngFor="let tech of technologies.slice(0, showAllTechnologies ? technologies.length : 6)"
-                        [routerLink]="['/home/category', tech.route, tech.type]" class="dropdown-item"
+                        [routerLink]="['/home/category', tech.technologyName, 'technology']" class="dropdown-item"
                         (click)="closeDropdown()">
-                        <span>{{ tech.name }}</span>
+                        <span>{{ tech.technologyName }}</span>
                     </a>
                 </div>
                 <button *ngIf="technologies.length > 6" class="see-more-btn" (click)="toggleShowAll('technology')">

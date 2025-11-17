@@ -48,39 +48,24 @@ export class HeaderComponent implements OnInit {
   ];
 
   // Categories (add more items to test "See More")
-  categories: string[] = [
-    'AI model', 'Agent', 'Voice', 'Image', 'Video Editing', 'Dev Tools',
-    'Analytics', 'Automation', 'Security', 'Database', 'Cloud Services', 'API Tools'
-  ];
+  categories: any[] = [];
 
   // Use Cases
-  useCases = [
-    { name: 'Sells', route: 'sells', type: 'usecase' },
-    { name: 'Dev Tools', route: 'dev-tools', type: 'usecase' },
-    { name: 'Productivity', route: 'productivity', type: 'usecase' },
-    { name: 'Marketing', route: 'marketing', type: 'usecase' },
-    { name: 'Design', route: 'design', type: 'usecase' },
-    { name: 'Customer Support', route: 'customer-support', type: 'usecase' },
-    { name: 'Finance', route: 'finance', type: 'usecase' },
-    { name: 'HR Management', route: 'hr-management', type: 'usecase' }
-  ];
+  useCases: any[] = [];
+  
+  
 
   // Technologies
-  technologies = [
-    { name: 'Java', route: 'java', type: 'technology' },
-    { name: 'Python', route: 'python', type: 'technology' },
-    { name: 'JavaScript', route: 'javascript', type: 'technology' },
-    { name: 'TypeScript', route: 'typescript', type: 'technology' },
-    { name: 'C#', route: 'csharp', type: 'technology' },
-    { name: 'Ruby', route: 'ruby', type: 'technology' },
-    { name: 'Go', route: 'go', type: 'technology' },
-    { name: 'Rust', route: 'rust', type: 'technology' }
-  ];
+    technologies: any[] = [];
+ 
 
   constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.userid = this.authService.getUserid()!;
+    this.loadCategories();
+     this.loadUsecases();
+      this.loadTechnologies();
 
     if (this.userid) {
       this.isuserloggedin = true;
@@ -89,6 +74,84 @@ export class HeaderComponent implements OnInit {
       this.isuserloggedin = false;
     }
   }
+
+
+  async loadTechnologies(): Promise<void> {
+    this.http.get(this.APIURL + `get_technologies`).subscribe({
+      next: (response: any) => {
+        if (response.message === "Technologies retrieved successfully") {
+          // Map the response to technologies array
+          this.technologies = response.technologies.map((t: any) => ({
+            id: t.id,
+            techknologyid: t.techknologyid,
+            technologyName: t.technologyName,
+            createdDate: new Date(t.createdDate)
+          }));
+        } else {
+          console.log('No technologies found');
+          this.technologies = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error loading technologies:', error);
+        alert("Failed to load technologies. Please try again.");
+        this.technologies = [];
+      }
+    });
+  }
+
+
+
+
+ async loadUsecases(): Promise<void> {
+  
+    this.http.get(this.APIURL + `get_usecases`).subscribe({
+      next: (response: any) => {
+        if (response.message === "Use cases retrieved successfully") {
+          // Map the response to usecases array
+          this.useCases = response.usecases.map((u: any) => ({
+            id: u.id,
+            usecaseid: u.usecaseadminid,
+            usecaseName: u.usecaseName,
+            createdDate: new Date(u.createdDate)
+          }));
+
+        } else {
+          this.useCases = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error loading use cases:', error);
+        alert("Failed to load use cases. Please try again.");
+        this.useCases = [];
+      }
+    });
+  }
+
+  async loadCategories(): Promise<void> {
+    this.http.get(this.APIURL + `get_categories`).subscribe({
+      next: (response: any) => {
+        if (response.message === "Categories retrieved successfully") {
+          // Map the response to categories array
+          this.categories = response.categories.map((c: any) => ({
+            id: c.id,
+            categoryid: c.categoryid,
+            categoryName: c.categoryName,
+            createdDate: new Date(c.createdDate)
+          }));
+        } else {
+          this.categories = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+        alert("Failed to load categories. Please try again.");
+        this.categories = [];
+      }
+    });
+  }
+
+
 
   // Toggle tab dropdown
   toggleTab(tab: string) {
