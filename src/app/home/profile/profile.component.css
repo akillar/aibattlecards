@@ -343,6 +343,7 @@ button[type="submit"]:hover:not(:disabled) {
   width: 20px;
   height: 20px;
   cursor: pointer;
+  z-index: 10;
 }
 
 .dotmenudropdown {

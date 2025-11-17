@@ -41,8 +41,49 @@ export class CategoryComponent {
         this.getProductBasedonUsecase(this.newCategory!)
         
       }
+      else if(category == 'technology'){
+        this.getProductBasedonTechnology(this.newCategory!)
+        
+      }
+
     });
   }
+
+
+
+  async getProductBasedonTechnology(newCategory: string): Promise<void> {
+  const payload = { newCategory };
+  this.http.post(this.APIURL + 'get_product_details_basedon_technology', payload).subscribe({
+    next: (response: any) => {
+      if (response.message === "yes") {
+        this.toolsArray = response.products.map((prod: any) => ({
+          productimage: prod.productimage 
+            ? `data:image/jpeg;base64,${prod.productimage}`
+            : '../../../assets/images/12.png',
+          productname: prod.productname,
+          productid: prod.productid,
+          userid: prod.userid,
+          productcategory: prod.productcategory,
+          productusecase: prod.useCases || [],
+          showDropdown: false
+        }));
+        this.noData = false;   // hide "no data" message
+      } else {
+        this.toolsArray = [];
+        this.noData = true;   // show "no data" message
+
+      }
+    },
+    error: (error) => {
+      console.error('❌ Error fetching product details:', error);
+      this.toolsArray = [];
+      this.noData = true;
+    }
+  });
+}
+
+
+
 
 
 async getProductBasedonUsecase(newCategory: string): Promise<void> {

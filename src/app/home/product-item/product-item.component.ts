@@ -19,6 +19,7 @@ interface ProductDetails {
   productdocumentation: string;
   productfundingstage: string;
   productdescription: string;
+  xlink: string;
   userid: string;
   rating: number;
   productfb: string;
@@ -459,6 +460,7 @@ toggleReviewForm() {
             productfb: prod.productfacebook || '',
             productlinkedin: prod.productlinkedin || '',
             productdocumentation: prod.productdocumentation || '',
+            xlink: prod.xlink || '',
             useCases: response.useCases || [],
             founders: response.founders || [],
             baseModels: response.baseModels || [],

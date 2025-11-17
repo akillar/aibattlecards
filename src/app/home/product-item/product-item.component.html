@@ -15,7 +15,6 @@
 
             <div class="review-form-wrapper">
                 <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
-                    <h2 class="form-title">Submit Your Review</h2>
 
                     <div class="form-group">
                         <label>Are you using commercial/personal?</label>
@@ -206,14 +205,7 @@
             </div>
 
             <!-- Founders -->
-            <div class="detail-item" *ngIf="productDetails.founders.length">
-                <span class="detail-label">Founders:</span>
-                <div class="detail-content">
-                    <div class="chip-wrapper">
-                        <span class="chip" *ngFor="let f of productDetails.founders">{{ f }}</span>
-                    </div>
-                </div>
-            </div>
+            
 
             <!-- Technology -->
             <div class="detail-item" *ngIf="productDetails.producttechnology.length">
@@ -245,13 +237,7 @@
                 </div>
             </div>
 
-            <!-- Funding Stage -->
-            <div class="detail-item">
-                <span class="detail-label">Funding Stage:</span>
-                <div class="detail-content">
-                    <span class="detail-value">{{ productDetails.productfundingstage }}</span>
-                </div>
-            </div>
+            
 
             <!-- License -->
             <div class="detail-item">
@@ -269,18 +255,21 @@
                 </div>
             </div>
 
-            <!-- Website -->
-            <div class="detail-item">
-                <span class="detail-label">Website:</span>
+           
+
+
+             <div class="detail-item">
+                <span class="detail-label">X Link:</span>
                 <div class="detail-content">
-                    <a *ngIf="productDetails.productwebsite" [href]="productDetails.productwebsite" target="_blank"
+                    <a *ngIf="productDetails.xlink" [href]="productDetails.xlink" target="_blank"
                         class="detail-link">
-                        {{ productDetails.productwebsite }}
+                        {{ productDetails.xlink }}
                     </a>
-                    <span *ngIf="!productDetails.productwebsite" class="detail-value detail-no-data">Not
+                    <span *ngIf="!productDetails.xlink" class="detail-value detail-no-data">Not
                         available</span>
                 </div>
             </div>
+
 
             <!-- Documentation -->
             <div class="detail-item">
@@ -296,6 +285,58 @@
             </div>
         </div>
     </div>
+
+
+
+
+    
+
+     <div class="details-section" *ngIf="productDetails">
+        <h3 class="section-heading">Company Details</h3>
+         <div class="details-list">
+            <div class="detail-item" *ngIf="productDetails.founders.length">
+                <span class="detail-label">Founders:</span>
+                <div class="detail-content">
+                    <div class="chip-wrapper">
+                        <span class="chip" *ngFor="let f of productDetails.founders">{{ f }}</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Funding Stage -->
+            <div class="detail-item">
+                <span class="detail-label">Funding Stage:</span>
+                <div class="detail-content">
+                    <span class="detail-value">{{ productDetails.productfundingstage }}</span>
+                </div>
+            </div>
+
+             <!-- Website -->
+            <div class="detail-item">
+                <span class="detail-label">Website:</span>
+                <div class="detail-content">
+                    <a *ngIf="productDetails.productwebsite" [href]="productDetails.productwebsite" target="_blank"
+                        class="detail-link">
+                        {{ productDetails.productwebsite }}
+                    </a>
+                    <span *ngIf="!productDetails.productwebsite" class="detail-value detail-no-data">Not
+                        available</span>
+                </div>
+            </div>
+
+
+
+         </div>
+
+
+     </div>
+
+
+
+
+
+
 
     <!-- Media Previews Section -->
     <div class="media-section" *ngIf="productDetails?.mediaPreviews?.length">

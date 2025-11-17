@@ -94,7 +94,7 @@ export class DashboardComponent implements OnInit {
 
 
     async getAllProductDetailsFeaturedProducts(): Promise<void> {
-    this.isLoadingMostViewed = true;
+    this.isLoadingFeatured = true;
     const requestBody = {
       page: this.currentPage,
       limit: this.pageSize
@@ -121,11 +121,11 @@ export class DashboardComponent implements OnInit {
         } else {
           console.warn("⚠️ No product found");
         }
-        this.isLoadingMostViewed = false;
+        this.isLoadingFeatured = false;
       },
       error: (error) => {
         console.error('❌ Error fetching product details:', error);
-        this.isLoadingMostViewed = false;
+        this.isLoadingFeatured = false;
       }
     });
   }

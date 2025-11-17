@@ -31,6 +31,8 @@
   z-index: 515;
   border-radius: 50%;
   transform: scale(0.8);
+  z-index: 10;
+
 }
 
 /* Enhanced Dropdown */
@@ -128,39 +130,7 @@
   transition: all 0.3s ease;
 }
 
-/* Enhanced Chips */
-.chip-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.6rem;
-  margin-top: auto;
-}
-
-.chip {
-  background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
-  color: #4338ca;
-  padding: 0.4rem 1rem;
-  border-radius: 20px;
-  font-size: 10px;
-  font-weight: 600;
-  border: 1px solid #e0e7ff;
-  position: relative;
-  overflow: hidden;
-  text-transform: capitalize;
-
-  /* 🟣 Smooth animated transitions */
-  transition: background 0.4s ease-in-out, color 0.3s ease-in-out,
-    border-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
-}
-
-.chip:hover {
-  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-  color: #5042ec;
-  border-color: #c7d2fe;
-  box-shadow: 0 0 10px rgba(80, 66, 236, 0.2);
-}
-
+ 
 /* Add Product Button Specific */
 .add-product {
   background: linear-gradient(135deg, #f0f8ff, #e6f3ff);

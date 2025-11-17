@@ -55,18 +55,11 @@ export class ProfileComponent implements OnInit {
  toolsArray: Tool[] = [];
 
   reviewsArray: Review[] = [];
-useCasesArray: string[] = [
-  'Customer Support',
-  'Lead Generation',
-  'Marketing Automation',
-  'Content Creation',
-  'Sales Outreach',
-  'Data Analysis',
-  'Fraud Detection',
-  'Recommendation Engine',
-  'Speech Recognition',
-  'Image Classification'
-];
+
+  categories: any[] = [];
+  usecases: any[] = [];
+  technologies: any[] = [];
+
   filteredUseCases: string[] = [];
   selectedUseCases: string[] = [];
   useCaseInput: string = '';
@@ -107,8 +100,13 @@ isLoadingUserProducts: boolean = false;
 
   ngOnInit(): void {
 
+    this.loadCategories();
+    this.loadUsecases();
+    this.loadTechnologies();
 
-this.productAddingForm = this.fb.group({
+
+ 
+   this.productAddingForm = this.fb.group({
       name: ['', Validators.required],
       type: ['', Validators.required],
       license: ['', Validators.required],
@@ -128,7 +126,8 @@ this.productAddingForm = this.fb.group({
 
       productfb: [''],
       documentationlink: [''],
-      productlinkedin: ['']
+      productlinkedin: [''],
+      xlink: [''],
     });
  
     this.profileForm = this.fb.group({
@@ -183,6 +182,79 @@ this.productAddingForm = this.fb.group({
       this.getUserReviews(this.userid);
     }
   }
+
+
+
+   async loadTechnologies(): Promise<void> {
+    this.http.get(this.APIURL + `get_technologies`).subscribe({
+      next: (response: any) => {
+
+        if (response.message === "Technologies retrieved successfully") {
+          // Map the response to technologies array
+          this.technologies = response.technologies.map((t: any) => ({
+            id: t.id,
+            techknologyid: t.techknologyid,
+            technologyName: t.technologyName,
+            createdDate: new Date(t.createdDate)
+          }));
+
+        } else {
+          console.log('No technologies found');
+          this.technologies = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error loading technologies:', error);
+        alert("Failed to load technologies. Please try again.");
+        this.technologies = [];
+      }
+    });
+  }
+
+
+
+
+async loadUsecases(): Promise<void> {
+  this.http.get(this.APIURL + 'get_usecases').subscribe({
+    next: (response: any) => {
+      if (response.message === "Use cases retrieved successfully") {
+        this.usecases = response.usecases.map((u: any) => ({
+          id: u.id,
+          usecaseid: u.usecaseadminid,
+          usecaseName: u.usecaseName
+        }));
+      }
+    },
+    error: (err) => {
+      console.error("Error loading use cases:", err);
+    }
+  });
+}
+
+
+async loadCategories(): Promise<void> {
+  this.http.get(this.APIURL + 'get_categories').subscribe({
+    next: (response: any) => {
+
+      if (response.message === "Categories retrieved successfully") {
+        this.categories = response.categories.map((c: any) => ({
+          id: c.id,
+          categoryid: c.categoryid,
+          categoryName: c.categoryName
+        }));
+      }
+    },
+    error: (err) => {
+      console.error("Error loading categories:", err);
+    }
+  });
+}
+
+
+
+
+
+
 
   disablePaste(event: ClipboardEvent) {
     event.preventDefault();
@@ -333,6 +405,7 @@ async getProductDetailsToUpdate(productId: string): Promise<void> {
       productdescription: prod.productdescription || '',
       productfb: prod.productfacebook || '',
       documentationlink: prod.productdocumentation || '',
+      xlink: prod.xlink || '',
       productlinkedin: prod.productlinkedin || ''
     });
 
@@ -582,6 +655,7 @@ private generateInitials(name: string): string {
     productdescription: formData.productdescription,
     productfacebook: formData.productfb,
     productlinkedin: formData.productlinkedin,
+    xlink: formData.xlink,
     founders: formData.founders.filter((f: string) => f.trim() !== ''),
     baseModels: formData.baseModels.filter((b: string) => b.trim() !== ''),
     deployments: formData.deployments.filter((d: string) => d.trim() !== ''),
@@ -661,6 +735,7 @@ async createProduct(): Promise<void> {
     formData.append('fundingStage', this.productAddingForm.get('fundingStage')?.value);
     formData.append('productdescription', this.productAddingForm.get('productdescription')?.value);
     formData.append('productdocumentation', this.productAddingForm.get('productdocumentation')?.value);
+    formData.append('xlink', this.productAddingForm.get('xlink')?.value);
     formData.append('userid', this.userid);
 
     // 🔹 Append array fields
@@ -829,19 +904,22 @@ togglePassword(field: 'old' | 'new' | 'confirm') {
   
 
   
-  onUseCaseInput(event: any) {
+onUseCaseInput(event: any) {
   const value = event.target.value.toLowerCase();
   this.useCaseInput = event.target.value;
 
   if (value) {
-    this.filteredUseCases = this.useCasesArray.filter(usecase =>
-      usecase.toLowerCase().includes(value) &&
-      !this.selectedUseCases.includes(usecase)
-    );
+    this.filteredUseCases = this.usecases
+      .filter(u =>
+        u.usecaseName.toLowerCase().includes(value) &&
+        !this.selectedUseCases.includes(u.usecaseName)
+      )
+      .map(u => u.usecaseName); // return only the names for the dropdown
   } else {
     this.filteredUseCases = [];
   }
 }
+
 
 /** Select use case */
 selectUseCase(usecase: string) {

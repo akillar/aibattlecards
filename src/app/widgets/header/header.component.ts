@@ -64,8 +64,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.userid = this.authService.getUserid()!;
     this.loadCategories();
-     this.loadUsecases();
-      this.loadTechnologies();
+    this.loadUsecases();
+    this.loadTechnologies();
 
     if (this.userid) {
       this.isuserloggedin = true;

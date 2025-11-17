@@ -234,4 +234,7 @@ export class GetMoreResultComponent implements OnInit {
       showDropdown: false
     }));
   }
+
+
+  
 }

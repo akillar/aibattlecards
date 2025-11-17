@@ -289,7 +289,7 @@
    ============================================ */
 
 .details-section {
-  margin: 0.5rem 0;
+  margin: 0.7rem 0;
   background: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -353,23 +353,7 @@
   font-style: italic;
 }
 
-/* Chip Styling */
-.chip-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.chip {
-  display: inline-block;
-  padding: 0.4rem 0.9rem;
-  background: #4a90e2;
-  color: #ffffff;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  white-space: nowrap;
-}
+ 
 
 /* Link Styling */
 .detail-link {
