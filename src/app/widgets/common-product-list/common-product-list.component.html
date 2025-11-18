@@ -1,14 +1,18 @@
 <div class="cards-container">
     <app-smaller-product-card *ngFor="let tool of toolsArray" [product]="tool">
     </app-smaller-product-card>
+
 </div>
+
+<span class="loadmorebtn" *ngIf="hasMoreData && !isLoading" (click)="loadMore()">
+    Load more
+</span>
+
 
 
 
 <!-- Load More Button -->
-<span class="loadmorebtn" *ngIf="hasMoreData && !isLoading" (click)="loadMore()">
-    Load more
-</span>
+
 
 <!-- No More Data Message -->
 <!-- <div *ngIf="!hasMoreData && !isLoading && toolsArray.length > 0" class="no-more-data">

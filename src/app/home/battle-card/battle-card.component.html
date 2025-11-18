@@ -41,21 +41,24 @@
         </div>
 
         <!-- Load More Button -->
-        <div class="load-more-container" *ngIf="hasMoreTools">
-            <button class="loadmorebtn" (click)="loadMoreTools()" [disabled]="isLoadingMoreTools">
-                <span *ngIf="!isLoadingMoreTools">Load More</span>
-                <span *ngIf="isLoadingMoreTools">
-                    <div class="loading-spinner"></div>
-                    Loading...
-                </span>
-            </button>
-        </div>
+
 
         <!-- End of results indicator -->
         <!-- <div class="end-of-results" *ngIf="!hasMoreTools && displayedTypeTools.length > 0">
             <p>You've reached the end of results</p>
         </div> -->
     </div>
+
+    <div class="load-more-container" *ngIf="hasMoreTools">
+        <button class="loadmorebtn" (click)="loadMoreTools()" [disabled]="isLoadingMoreTools">
+            <span *ngIf="!isLoadingMoreTools">Load More</span>
+            <span *ngIf="isLoadingMoreTools">
+                <div class="loading-spinner"></div>
+                Loading...
+            </span>
+        </button>
+    </div>
+
 
     <!-- No items template -->
     <ng-template #noItems>

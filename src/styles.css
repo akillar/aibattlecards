@@ -57,7 +57,6 @@ body {
   min-width: 120px;
 }
 
-
 .chip-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -97,7 +96,6 @@ body {
   z-index: -1;
 }
 
- 
 .chip a {
   display: flex;
   align-items: center;
@@ -105,7 +103,7 @@ body {
   text-decoration: none;
   color: var(--text-color);
 }
- 
+
 .chip.active {
   background-color: var(--primary-color);
   color: #fff;
@@ -313,33 +311,6 @@ body {
   background: #c92a36;
 }
 
-.loadmorebtn {
-  display: inline-block;
-  padding: 12px 28px;
-  font-family: var(--font-family, "Manrope", sans-serif);
-  font-size: 16px;
-  font-weight: 600;
-  color: black;
-  /* background: var(--accent-color, #5a67d8); */
-  border: 1px solid var(--accent-color);
-  border-radius: var(--border-radius, 8px);
-  cursor: pointer;
-  box-shadow: var(--shadow-light, 0 2px 8px rgba(0, 0, 0, 0.1));
-  transition: all 0.3s ease;
-  margin-top: 10px;
-  width: fit-content;
-}
-
-.loadmorebtn:hover {
-  /* background: var(--accent-hover, #434190); */
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-}
-
-.loadmorebtn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
 .modal-bullets {
   list-style: none; /* remove default bullets */
   padding: 0;
@@ -432,7 +403,6 @@ app-loading {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 2rem;
   padding: 0.75rem 1.5rem;
   background: var(--primary-gradient);
   color: white;
@@ -442,7 +412,6 @@ app-loading {
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
   text-decoration: none;
 }
 
