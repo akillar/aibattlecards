@@ -183,7 +183,41 @@ isLoadingUserProducts: boolean = false;
     }
   }
 
+async onDeleteAccount(): Promise<void> {
+  if (this.deleteConfirmText === 'delete-account') {
+    this.showMessage("Deleting your account...", "error");
+    
+    const payload = { userid: this.userid };
+    
+    this.http.post(this.APIURL + 'delete_account', payload).subscribe({
+      next: (response: any) => {
+        if (response.message === "Account deleted successfully") {
+          this.showMessage("Account deleted successfully!", "success");
+          this.showDeleteConfirm = false;
+          this.deleteConfirmText = '';
+          
+        
+          localStorage.clear();
+          sessionStorage.clear();
+          
+          setTimeout(() => {
+            this.router.navigate(['/auth/log-in']);
+          }, 2000);
+        } else {
+          this.showMessage("Failed to delete account. Please try again.", "error");
+        }
+      },
+      error: (error) => {
+        console.error('❌ Error deleting account:', error);
+        this.showMessage("An error occurred while deleting your account. Please try again.", "error");
+      }
+    });
+  }
+}
+ 
+ 
 
+ 
 
    async loadTechnologies(): Promise<void> {
     this.http.get(this.APIURL + `get_technologies`).subscribe({
@@ -264,13 +298,11 @@ async loadCategories(): Promise<void> {
     event.preventDefault();
   }
 
-  onDeleteAccount() {
-    if (this.deleteConfirmText === 'delete-account') {
-      this.showMessage("Accountis deleting!", "success");
-      this.showDeleteConfirm = false;
-      this.deleteConfirmText = '';  
-    }
-  }
+
+
+
+
+
 
   
 
