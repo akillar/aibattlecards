@@ -129,10 +129,7 @@
 .tab-btn:hover {
   background: #e0e0e0;
 }
-.active-tab {
-  background: #4a90e2;
-  color: #fff;
-}
+ 
 
 .dropdown-arrow {
   font-size: 13px;

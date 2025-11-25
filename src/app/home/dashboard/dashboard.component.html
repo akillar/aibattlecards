@@ -1,5 +1,6 @@
 <!-- Featured Section -->
-<div class="getmoreresult">
+<div *ngIf="featuredArrayDetails.length > 0">
+  <div class="getmoreresult">
   <h2 class="section-title">Featured</h2>
   <div class="arrow-wrapper" (click)="getmoreresult('featured')">
     <img src="../../../assets/images/getmoreresult.svg" alt="More results">
@@ -9,7 +10,14 @@
 <app-post-slider-shimmer *ngIf="isLoadingFeatured" [cardCount]="5"></app-post-slider-shimmer>
 <app-product-card-holder *ngIf="!isLoadingFeatured" [featuredArrayDetails]="featuredArrayDetails"></app-product-card-holder>
 
-<!-- New Products Section -->
+</div>
+
+
+
+
+
+<div *ngIf="NewArrayDetails.length > 0">
+  <!-- New Products Section -->
 <div class="getmoreresult">
   <h2 class="section-title">New</h2>
   <div class="arrow-wrapper" (click)="getmoreresult('new')">
@@ -20,6 +28,12 @@
 <app-post-slider-shimmer *ngIf="isLoadingNew" [cardCount]="5"></app-post-slider-shimmer>
 <app-product-card-holder *ngIf="!isLoadingNew" [featuredArrayDetails]="NewArrayDetails"></app-product-card-holder>
 
+</div>
+
+
+
+<div *ngIf="MostViewedArrayDetails.length > 0">
+  
 <!-- Most Viewed Section -->
 <div class="getmoreresult">
   <h2 class="section-title">Most Viewed</h2>
@@ -29,8 +43,10 @@
 </div>
 
 <app-post-slider-shimmer *ngIf="isLoadingMostViewed" [cardCount]="5"></app-post-slider-shimmer>
-<app-product-card-holder *ngIf="!isLoadingMostViewed"
-  [featuredArrayDetails]="MostViewedArrayDetails"></app-product-card-holder>
+<app-product-card-holder *ngIf="!isLoadingMostViewed" 
+[featuredArrayDetails]="MostViewedArrayDetails"></app-product-card-holder>
+
+</div>
 
 <!-- All Products Section -->
 <h2 class="section-title">All</h2>
