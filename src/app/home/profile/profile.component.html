@@ -221,11 +221,15 @@
                     <div class="form-group" formArrayName="deployments">
                         <label>Deployment</label>
                         <div *ngFor="let deploy of deployments.controls; let i = index" class="dynamic-field">
-                            <input type="text" [formControlName]="i" placeholder="Enter deployment type" />
+                            <select [formControlName]="i" class="deployment-select">
+                                <option value="" disabled selected>Select deployment type</option>
+                                <option value="SaaS">SaaS</option>
+                                <option value="On-Prem">On-Prem</option>
+                                <option value="Cloud">Cloud</option>
+                                <option value="Hybrid">Hybrid</option>
+                            </select>
                             <button type="button" class="btn-add" (click)="addField(deployments)">+</button>
-                            <button type="button" class="btn-remove" (click)="removeField(deployments, i)">
-                                -
-                            </button>
+                            <button type="button" class="btn-remove" (click)="removeField(deployments, i)">-</button>
                         </div>
                     </div>
 

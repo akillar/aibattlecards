@@ -205,7 +205,7 @@
             </div>
 
             <!-- Founders -->
-            
+
 
             <!-- Technology -->
             <div class="detail-item" *ngIf="productDetails.producttechnology.length">
@@ -237,7 +237,7 @@
                 </div>
             </div>
 
-            
+
 
             <!-- License -->
             <div class="detail-item">
@@ -255,14 +255,13 @@
                 </div>
             </div>
 
-           
 
 
-             <div class="detail-item">
+
+            <div class="detail-item">
                 <span class="detail-label">X Link:</span>
                 <div class="detail-content">
-                    <a *ngIf="productDetails.xlink" [href]="productDetails.xlink" target="_blank"
-                        class="detail-link">
+                    <a *ngIf="productDetails.xlink" [href]="productDetails.xlink" target="_blank" class="detail-link">
                         {{ productDetails.xlink }}
                     </a>
                     <span *ngIf="!productDetails.xlink" class="detail-value detail-no-data">Not
@@ -289,11 +288,11 @@
 
 
 
-    
 
-     <div class="details-section" *ngIf="productDetails">
+
+    <div class="details-section" *ngIf="productDetails">
         <h3 class="section-heading">Company Details</h3>
-         <div class="details-list">
+        <div class="details-list">
             <div class="detail-item" *ngIf="productDetails.founders.length">
                 <span class="detail-label">Founders:</span>
                 <div class="detail-content">
@@ -312,7 +311,7 @@
                 </div>
             </div>
 
-             <!-- Website -->
+            <!-- Website -->
             <div class="detail-item">
                 <span class="detail-label">Website:</span>
                 <div class="detail-content">
@@ -327,26 +326,92 @@
 
 
 
-         </div>
+        </div>
 
 
-     </div>
-
-
-
+    </div>
 
 
 
 
-    <!-- Media Previews Section -->
-    <div class="media-section" *ngIf="productDetails?.mediaPreviews?.length">
+    <div class="details-section">
         <h3 class="section-heading">Media Previews</h3>
+
         <div class="media-grid">
-            <a *ngFor="let m of productDetails?.mediaPreviews" [href]="m.includes('youtube') ? m : null" target="_blank"
-                [class.disabled-link]="!m.includes('youtube')" class="media-item">
-                <img [src]="m.includes('youtube') ? '../../../assets/images/youtube.png' : '../../../assets/images/12.png'"
-                    alt="Preview" class="media-thumbnail" />
-            </a>
+            <div *ngFor="let m of productDetails?.mediaPreviews" class="media-item" (click)="openMediaModal(m)">
+                <!-- YouTube Video Preview -->
+                <div *ngIf="isYouTubeLink(m)" class="media-preview youtube-preview">
+                    <img [src]="getYouTubeThumbnail(m)" alt="YouTube Preview" class="media-thumbnail" />
+                    <div class="play-overlay">
+                        <span class="material-icons play-icon">play_circle</span>
+                    </div>
+                    <div class="media-label">
+                        <span class="material-icons">smart_display</span>
+                        <span>YouTube Video</span>
+                    </div>
+                </div>
+
+                <!-- Other Link Preview -->
+                <div *ngIf="!isYouTubeLink(m) && isValidUrl(m)" class="media-preview link-preview">
+                    <div class="link-icon-container">
+                        <span class="material-icons link-icon">link</span>
+                    </div>
+                    <div class="media-label">
+                        <span class="material-icons">language</span>
+                        <span>{{ getDomainName(m) }}</span>
+                    </div>
+                </div>
+
+                <!-- Invalid/Unknown Media -->
+                <div *ngIf="!isValidUrl(m)" class="media-preview invalid-preview">
+                    <div class="link-icon-container">
+                        <span class="material-icons error-icon">broken_image</span>
+                    </div>
+                    <div class="media-label">
+                        <span>Invalid URL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <!-- Media Modal -->
+    <div class="media-modal-overlay" *ngIf="showMediaModal" (click)="closeMediaModal()">
+        <div class="media-modal-content" (click)="$event.stopPropagation()">
+            <button class="modal-close-btn" (click)="closeMediaModal()">
+                <span class="material-icons">close</span>
+            </button>
+
+            <!-- YouTube Embed -->
+            <div *ngIf="selectedMediaUrl && isYouTubeLink(selectedMediaUrl)" class="youtube-embed-container">
+                <iframe [src]="getYouTubeEmbedUrl(selectedMediaUrl)" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen class="youtube-iframe">
+                </iframe>
+            </div>
+
+            <!-- Other Link Display -->
+            <div *ngIf="selectedMediaUrl && !isYouTubeLink(selectedMediaUrl) && isValidUrl(selectedMediaUrl)"
+                class="link-display-container">
+                <div class="link-header">
+                    <span class="material-icons">language</span>
+                    <h3>External Link</h3>
+                </div>
+                <div class="link-info">
+                    <p class="link-domain">{{ getDomainName(selectedMediaUrl) }}</p>
+                    <p class="link-url">{{ selectedMediaUrl }}</p>
+                </div>
+                <div class="link-actions">
+                    <a [href]="selectedMediaUrl" target="_blank" rel="noopener noreferrer" class="btn-open-link">
+                        <span class="material-icons">open_in_new</span>
+                        Open Link in New Tab
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 

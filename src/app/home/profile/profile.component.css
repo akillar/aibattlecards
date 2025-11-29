@@ -5,6 +5,22 @@
   max-width: 1400px;
   margin: 0 auto;
 }
+.deployment-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+}
 
 /* Left Tabs */
 .tabs {
@@ -225,7 +241,7 @@ button[type="submit"]:hover:not(:disabled) {
 
 .product-card {
   min-width: 280px;
-  max-width: 280px;
+  min-height: 280px;
   background: #fff;
   border-radius: 8px;
   padding: 1.25rem;

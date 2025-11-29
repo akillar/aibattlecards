@@ -8,6 +8,7 @@ import { AuthService } from '../../services/getuserid.service';
 import { LoadingComponent } from '../../widgets/loading/loading.component';
 import { ReviewCardComponent } from '../../widgets/review-card/review-card.component';
 import { ProductItemShimmerComponent } from '../../shimmer/product-item-shimmer/product-item-shimmer.component';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 interface ProductDetails {
   productimage: string;
@@ -62,7 +63,7 @@ interface RatingData {
 @Component({
   selector: 'app-product-item',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, ProductItemShimmerComponent,  ReviewCardComponent],
+  imports: [ReactiveFormsModule, CommonModule, ProductItemShimmerComponent, ReviewCardComponent],
   templateUrl: './product-item.component.html',
   styleUrl: './product-item.component.css'
 })
@@ -96,13 +97,18 @@ export class ProductItemComponent {
   ratingData: RatingData | null = null;
   isuserloggedin: boolean = false;
   isEditingReview: boolean = false;
-currentReviewId: string = '';
+  currentReviewId: string = '';
+
+  // Media preview properties
+  selectedMediaUrl: string | null = null;
+  showMediaModal: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -126,173 +132,158 @@ currentReviewId: string = '';
         this.getReviews(this.productid, 0, true);
         this.calculateProductRating(this.productid);
 
-         if (this.userid) { 
-           this.isuserloggedin = true;
-            this.checkExistingReview();
-    }else{
-       this.isuserloggedin = false ;
-    }
-
+        if (this.userid) { 
+          this.isuserloggedin = true;
+          this.checkExistingReview();
+        } else {
+          this.isuserloggedin = false;
+        }
       }
-      
     });
   }
+
   handleReviewDeleted(reviewid: string) {
-  // Remove the deleted review from the array
-  this.reviews = this.reviews.filter(review => review.reviewid !== reviewid);
-  this.totalReviews--;
-  
-  // Show success message
-  this.showMessage('Review deleted successfully', 'success');
-  
-  // Recalculate ratings
-  if (this.productid) {
-    this.calculateProductRating(this.productid);
+    this.reviews = this.reviews.filter(review => review.reviewid !== reviewid);
+    this.totalReviews--;
+    this.showMessage('Review deleted successfully', 'success');
+    if (this.productid) {
+      this.calculateProductRating(this.productid);
+    }
   }
-}
-closeReviewFormModal(): void {
-  this.showReviewForm = false;
-}
+
+  closeReviewFormModal(): void {
+    this.showReviewForm = false;
+  }
+
   async checkExistingReview(): Promise<void> {
-  if (!this.userid || !this.productid) return;
+    if (!this.userid || !this.productid) return;
 
-  const payload = {
-    productid: this.productid,
-    userid: this.userid
-  };
+    const payload = {
+      productid: this.productid,
+      userid: this.userid
+    };
 
-  this.http.post<any>(this.APIURL + 'check_existing_review', payload).subscribe({
-    next: (response) => {
-      if (response.message === "found") {
-        this.isEditingReview = true;
-        this.currentReviewId = response.review.reviewid;
-        this.populateFormWithReview(response.review);
-      } else {
-        this.isEditingReview = false;
-        this.currentReviewId = '';
-      }
-    },
-    error: (error) => {
-      this.isEditingReview = false;
-    }
-  });
-}
-
-populateFormWithReview(review: any): void {
-  this.reviewForm.patchValue({
-    ispaidtogglecommercialorpersonal: review.ispaidtogglecommercialorpersonal,
-    usageDuration: review.usageDuration,
-    experienceRating: review.experienceRating,
-    efficiencyRating: review.efficiencyRating,
-    documentationRating: review.documentationRating,
-    isPaid: review.isPaid,
-    paidVersionRating: review.paidVersionRating,
-    additionalComments: review.additionalComments
-  });
-
-  this.showPaidRating = review.isPaid === 'yes';
-}
-
-  
-  
-  
-  async submitReview(): Promise<void> {
-
-  if (this.reviewForm.invalid) {
-    this.markFormGroupTouched(this.reviewForm);
-    this.showMessage("Please fill in all required fields", "error");
-    return;
-  }
-
-  this.isSubmittingReview = true;
-  
-  const formValues = this.reviewForm.value;
-  const payload = {
-    productid: this.productid,
-    userid: this.userid,
-    ispaidtogglecommercialorpersonal: formValues.ispaidtogglecommercialorpersonal,
-    usageDuration: formValues.usageDuration,
-    experienceRating: formValues.experienceRating,
-    efficiencyRating: formValues.efficiencyRating,
-    documentationRating: formValues.documentationRating,
-    isPaid: formValues.isPaid,
-    paidVersionRating: this.showPaidRating ? formValues.paidVersionRating : null,
-    additionalComments: formValues.additionalComments
-  };
-
-  if (this.isEditingReview && this.currentReviewId) {
-    (payload as any).reviewid = this.currentReviewId;
-  }
-
-  const endpoint = this.isEditingReview ? 'update_review' : 'add_review';
-  const successMessage = this.isEditingReview ? 'Review updated successfully!' : 'Review added successfully!';
-
-  this.http.post(this.APIURL + endpoint, payload).subscribe({
-    next: (response: any) => {
-
-      if (response.message === "added" || response.message === "updated") {
-        if (this.productDetails && response.new_rating !== undefined) {
-          this.productDetails.rating = response.new_rating;
-        }
-
-        // Reset form and hide review form
-        this.reviewForm.reset();
-        this.reviewForm.patchValue({
-          experienceRating: 1,
-          efficiencyRating: 1,
-          documentationRating: 1,
-          paidVersionRating: 1
-        });
-        this.showReviewForm = false;
-        this.showPaidRating = false;
-        this.showReviewForm = false;
-        
-        this.currentOffset = 0;
-        this.getReviews(this.productid, 0, true);
-        
-        this.calculateProductRating(this.productid);
-        
-        if (!this.isEditingReview) {
+    this.http.post<any>(this.APIURL + 'check_existing_review', payload).subscribe({
+      next: (response) => {
+        if (response.message === "found") {
           this.isEditingReview = true;
-          this.currentReviewId = response.reviewid;
+          this.currentReviewId = response.review.reviewid;
+          this.populateFormWithReview(response.review);
+        } else {
+          this.isEditingReview = false;
+          this.currentReviewId = '';
         }
-        
-        this.showMessage(successMessage, "success");
-      } else if (response.message === "review_exists") {
-        this.isEditingReview = true;
-        this.currentReviewId = response.existing_review.reviewid;
-        this.populateFormWithReview(response.existing_review);
-        this.showMessage("You already have a review for this product. Form populated with existing data for editing.", "error");
-      } else {
-        this.showMessage(`Failed to ${this.isEditingReview ? 'update' : 'add'} review. Please try again.`, "error");
+      },
+      error: (error) => {
+        this.isEditingReview = false;
       }
-      this.isSubmittingReview = false;
-    },
-    error: (error) => {
-      this.isSubmittingReview = false;
-      let errorMessage = `Error ${this.isEditingReview ? 'updating' : 'submitting'} review. Please try again.`;
-      if (error.error && error.error.detail) {
-        errorMessage = error.error.detail;
-      }
-      this.showMessage(errorMessage, "error");
-    }
-  });
-}
-
-toggleReviewForm() {
-  this.showReviewForm = !this.showReviewForm;
-  
-  if (this.showReviewForm && this.isEditingReview && this.currentReviewId) {
-   
-    this.checkExistingReview();
+    });
   }
-}
 
+  populateFormWithReview(review: any): void {
+    this.reviewForm.patchValue({
+      ispaidtogglecommercialorpersonal: review.ispaidtogglecommercialorpersonal,
+      usageDuration: review.usageDuration,
+      experienceRating: review.experienceRating,
+      efficiencyRating: review.efficiencyRating,
+      documentationRating: review.documentationRating,
+      isPaid: review.isPaid,
+      paidVersionRating: review.paidVersionRating,
+      additionalComments: review.additionalComments
+    });
+
+    this.showPaidRating = review.isPaid === 'yes';
+  }
+
+  async submitReview(): Promise<void> {
+    if (this.reviewForm.invalid) {
+      this.markFormGroupTouched(this.reviewForm);
+      this.showMessage("Please fill in all required fields", "error");
+      return;
+    }
+
+    this.isSubmittingReview = true;
+    
+    const formValues = this.reviewForm.value;
+    const payload = {
+      productid: this.productid,
+      userid: this.userid,
+      ispaidtogglecommercialorpersonal: formValues.ispaidtogglecommercialorpersonal,
+      usageDuration: formValues.usageDuration,
+      experienceRating: formValues.experienceRating,
+      efficiencyRating: formValues.efficiencyRating,
+      documentationRating: formValues.documentationRating,
+      isPaid: formValues.isPaid,
+      paidVersionRating: this.showPaidRating ? formValues.paidVersionRating : null,
+      additionalComments: formValues.additionalComments
+    };
+
+    if (this.isEditingReview && this.currentReviewId) {
+      (payload as any).reviewid = this.currentReviewId;
+    }
+
+    const endpoint = this.isEditingReview ? 'update_review' : 'add_review';
+    const successMessage = this.isEditingReview ? 'Review updated successfully!' : 'Review added successfully!';
+
+    this.http.post(this.APIURL + endpoint, payload).subscribe({
+      next: (response: any) => {
+        if (response.message === "added" || response.message === "updated") {
+          if (this.productDetails && response.new_rating !== undefined) {
+            this.productDetails.rating = response.new_rating;
+          }
+
+          this.reviewForm.reset();
+          this.reviewForm.patchValue({
+            experienceRating: 1,
+            efficiencyRating: 1,
+            documentationRating: 1,
+            paidVersionRating: 1
+          });
+          this.showReviewForm = false;
+          this.showPaidRating = false;
+          
+          this.currentOffset = 0;
+          this.getReviews(this.productid, 0, true);
+          
+          this.calculateProductRating(this.productid);
+          
+          if (!this.isEditingReview) {
+            this.isEditingReview = true;
+            this.currentReviewId = response.reviewid;
+          }
+          
+          this.showMessage(successMessage, "success");
+        } else if (response.message === "review_exists") {
+          this.isEditingReview = true;
+          this.currentReviewId = response.existing_review.reviewid;
+          this.populateFormWithReview(response.existing_review);
+          this.showMessage("You already have a review for this product. Form populated with existing data for editing.", "error");
+        } else {
+          this.showMessage(`Failed to ${this.isEditingReview ? 'update' : 'add'} review. Please try again.`, "error");
+        }
+        this.isSubmittingReview = false;
+      },
+      error: (error) => {
+        this.isSubmittingReview = false;
+        let errorMessage = `Error ${this.isEditingReview ? 'updating' : 'submitting'} review. Please try again.`;
+        if (error.error && error.error.detail) {
+          errorMessage = error.error.detail;
+        }
+        this.showMessage(errorMessage, "error");
+      }
+    });
+  }
+
+  toggleReviewForm() {
+    this.showReviewForm = !this.showReviewForm;
+    
+    if (this.showReviewForm && this.isEditingReview && this.currentReviewId) {
+      this.checkExistingReview();
+    }
+  }
 
   async getReviews(productid: string, offset: number = 0, reset: boolean = false): Promise<void> {
-
-    if (reset) {
-    } else {
+    if (!reset) {
       this.isLoadingMoreReviews = true;
     }
 
@@ -316,7 +307,6 @@ toggleReviewForm() {
           this.totalReviews = response.total_reviews || 0;
           this.hasMoreReviews = response.has_more || false;
         } else {
-          // Handle case when no reviews found
           if (reset) {
             this.reviews = [];
             this.totalReviews = 0;
@@ -325,9 +315,7 @@ toggleReviewForm() {
           }
         }
         
-        if (reset) {
-          
-        } else {
+        if (!reset) {
           this.isLoading = false;
           this.isLoadingMoreReviews = false;
         }
@@ -335,7 +323,6 @@ toggleReviewForm() {
       error: (error) => {
         console.error('❌ Error fetching reviews:', error);
         if (reset) {
-          
           this.reviews = [];
           this.totalReviews = 0;
           this.isLoading = false;
@@ -347,11 +334,6 @@ toggleReviewForm() {
       }
     });
   }
-
-
-
-
-
 
   async calculateProductRating(productid: string): Promise<void> {
     this.isCalculatingRating = true;
@@ -368,7 +350,6 @@ toggleReviewForm() {
             num_reviews: response.num_reviews || 0
           };
           
-          // Update product details rating
           if (this.productDetails) {
             this.productDetails.rating = response.weighted_rating || 0;
           }
@@ -387,10 +368,9 @@ toggleReviewForm() {
         this.isCalculatingRating = false;
       },
       error: (error) => {
-        this.isLoading = false
+        this.isLoading = false;
         console.error('❌ Error calculating rating:', error);
         this.isCalculatingRating = false;
-        // Set default values on error
         this.ratingData = {
           core_avg: 0,
           overall_score: 0,
@@ -420,8 +400,6 @@ toggleReviewForm() {
       this.messageVisible = false;
     }, 3000);
   }
-
-
 
   loadMoreReviews(): void {
     if (this.hasMoreReviews && !this.isLoadingMoreReviews) {
@@ -468,7 +446,6 @@ toggleReviewForm() {
             mediaPreviews: response.mediaPreviews || [],
             repositories: response.repositories || [],
           };
-          // console.log('✅ Product details loaded:', this.productDetails);
         } else {
           console.warn("No product found");
           this.showMessage("Product not found", "error");
@@ -498,7 +475,6 @@ toggleReviewForm() {
     this.reviewForm.get(controlName)?.setValue(value);
   }
 
- 
   // Helper methods for template
   getStars(rating: string | number): string {
     const numRating = typeof rating === 'string' ? parseInt(rating) || 0 : rating || 0;
@@ -508,7 +484,6 @@ toggleReviewForm() {
     return fullStars + emptyStars;
   }
 
-  // Helper method to get rating stars for product rating display
   getProductRatingStars(rating: number): string {
     const roundedRating = Math.max(0, Math.min(5, Math.round(rating || 0)));
     const fullStars = '★'.repeat(roundedRating);
@@ -563,10 +538,10 @@ toggleReviewForm() {
 
   getRatingColor(rating: number): string {
     const safeRating = rating || 0;
-    if (safeRating >= 4.5) return '#4CAF50'; // Green
-    if (safeRating >= 3.5) return '#FF9800'; // Orange
-    if (safeRating >= 2.5) return '#FFC107'; // Yellow
-    return '#F44336'; // Red
+    if (safeRating >= 4.5) return '#4CAF50';
+    if (safeRating >= 3.5) return '#FF9800';
+    if (safeRating >= 2.5) return '#FFC107';
+    return '#F44336';
   }
 
   hasValidRatingData(): boolean {
@@ -575,5 +550,76 @@ toggleReviewForm() {
 
   getSafeRating(): number {
     return this.productDetails?.rating || 0;
+  }
+
+  // Media preview helper methods
+  isYouTubeLink(url: string): boolean {
+    if (!url) return false;
+    return url.includes('youtube.com') || url.includes('youtu.be');
+  }
+
+  getYouTubeEmbedUrl(url: string): SafeResourceUrl {
+    if (!url) return '';
+    
+    let videoId = '';
+    
+    if (url.includes('youtube.com/watch')) {
+      const urlParams = new URLSearchParams(url.split('?')[1]);
+      videoId = urlParams.get('v') || '';
+    } else if (url.includes('youtu.be/')) {
+      videoId = url.split('youtu.be/')[1]?.split('?')[0] || '';
+    } else if (url.includes('youtube.com/embed/')) {
+      videoId = url.split('youtube.com/embed/')[1]?.split('?')[0] || '';
+    }
+    
+    const embedUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+    return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+  }
+
+  getYouTubeThumbnail(url: string): string {
+    if (!url) return '../../../assets/images/youtube.png';
+    
+    let videoId = '';
+    
+    if (url.includes('youtube.com/watch')) {
+      const urlParams = new URLSearchParams(url.split('?')[1]);
+      videoId = urlParams.get('v') || '';
+    } else if (url.includes('youtu.be/')) {
+      videoId = url.split('youtu.be/')[1]?.split('?')[0] || '';
+    } else if (url.includes('youtube.com/embed/')) {
+      videoId = url.split('youtube.com/embed/')[1]?.split('?')[0] || '';
+    }
+    
+    return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '../../../assets/images/youtube.png';
+  }
+
+  isValidUrl(url: string): boolean {
+    if (!url) return false;
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  getDomainName(url: string): string {
+    if (!url) return 'Link';
+    try {
+      const urlObj = new URL(url);
+      return urlObj.hostname.replace('www.', '');
+    } catch {
+      return 'Link';
+    }
+  }
+
+  openMediaModal(url: string): void {
+    this.selectedMediaUrl = url;
+    this.showMediaModal = true;
+  }
+
+  closeMediaModal(): void {
+    this.showMediaModal = false;
+    this.selectedMediaUrl = null;
   }
 }

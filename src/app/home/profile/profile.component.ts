@@ -51,6 +51,7 @@ export class ProfileComponent implements OnInit {
   selectedProductFile: File | null = null;
   userInitials: string = "";
   isEditMode: boolean = false;
+  isFeaturedGlobal: number = 0; 
 
  toolsArray: Tool[] = [];
 
@@ -424,6 +425,7 @@ async getProductDetailsToUpdate(productId: string): Promise<void> {
 
   private populateProductForm(response: any): void {
     const prod = response.product;
+    this.isFeaturedGlobal = prod.isFeatured || 0;
  
 
     // Patch basic form fields
@@ -674,7 +676,7 @@ private generateInitials(name: string): string {
     }
   }
 
-  private updateProductDetails(formData: any): void {
+  async updateProductDetails(formData: any): Promise<void> {
      const payload: any = {
     productid: this.updatingproductid,
     userid: this.userid,
@@ -688,6 +690,7 @@ private generateInitials(name: string): string {
     productfacebook: formData.productfb,
     productlinkedin: formData.productlinkedin,
     xlink: formData.xlink,
+    isFeatured: this.isFeaturedGlobal, 
     founders: formData.founders.filter((f: string) => f.trim() !== ''),
     baseModels: formData.baseModels.filter((b: string) => b.trim() !== ''),
     deployments: formData.deployments.filter((d: string) => d.trim() !== ''),
@@ -711,7 +714,7 @@ private generateInitials(name: string): string {
   }
 }
 
-  private sendUpdateRequest(payload: any): void {
+  async sendUpdateRequest(payload: any): Promise<void> {
     this.http.post(this.APIURL + 'update_product_details', payload).subscribe({
       next: (response: any) => {
         if (response.message === 'success') {
@@ -780,8 +783,10 @@ async createProduct(): Promise<void> {
     const baseModels = this.productAddingForm.get('baseModels')?.value || [];
     baseModels.forEach((b: string, i: number) => formData.append(`baseModels[${i}]`, b));
 
+    // 🔹 Deployments - Filter out empty values
     const deployments = this.productAddingForm.get('deployments')?.value || [];
-    deployments.forEach((d: string, i: number) => formData.append(`deployments[${i}]`, d));
+    const validDeployments = deployments.filter((d: string) => d && d.trim() !== '');
+    validDeployments.forEach((d: string, i: number) => formData.append(`deployments[${i}]`, d));
 
     const mediaPreviews = this.productAddingForm.get('mediaPreviews')?.value || [];
     mediaPreviews.forEach((m: string, i: number) => formData.append(`mediaPreviews[${i}]`, m));
@@ -798,7 +803,7 @@ async createProduct(): Promise<void> {
     if (fileInput?.files?.[0]) {
       formData.append('productImage', fileInput.files[0]);
     }
-
+    
     // ✅ Social Links
     formData.append('productfb', this.productAddingForm.get('productfb')?.value || '');
     formData.append('productlinkedin', this.productAddingForm.get('productlinkedin')?.value || '');
@@ -827,7 +832,6 @@ async createProduct(): Promise<void> {
     console.warn('❌ Form is invalid.');
   }
 }
-
 
 
 
