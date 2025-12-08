@@ -415,6 +415,20 @@ export class ProductItemComponent {
     this.showPopup = false;
   }
 
+hasValidRepositories(): boolean {
+  if (
+    !this.productDetails ||
+    !this.productDetails.repositories ||
+    !Array.isArray(this.productDetails.repositories)
+  ) {
+    return false; // ❗ MUST return boolean
+  }
+
+  return this.productDetails.repositories.some(
+    r => typeof r === 'string' && r.trim() !== ''
+  );
+}
+
   async getProductDetails(productid: string): Promise<void> {
     this.isLoading = true;
     const payload = { productid };

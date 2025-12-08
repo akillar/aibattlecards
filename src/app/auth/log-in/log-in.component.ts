@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../../services/getuserid.service';
 
 @Component({
   selector: 'app-log-in',
@@ -12,16 +13,18 @@ import { environment } from '../../environments/environment';
   templateUrl: './log-in.component.html',
   styleUrl: './log-in.component.css'
 })
-export class LogInComponent {
+export class LogInComponent implements OnInit{
   loginForm: FormGroup;
   APIURL = environment.APIURL;
   message:string = '';
+  userid: string = '';
 
 
      constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private route: Router
+    private route: Router,
+    private authService: AuthService
     
   ) {
   
@@ -32,6 +35,20 @@ export class LogInComponent {
     });
  
 
+  }
+ngOnInit(): void {
+    // Check if user is already logged in
+    this.userid = this.authService.getUserid()!;
+    
+    if (this.userid && this.userid.trim() !== '') {
+      // User is already logged in, redirect to dashboard
+      console.log('User already logged in, redirecting to dashboard...');
+      this.route.navigate(['/home/dashboard']);
+      return;
+    }
+    
+    // User not logged in, stay on login page
+    console.log('User not logged in, showing login form');
   }
 
 async onSubmitLoginDetails(): Promise<void> {

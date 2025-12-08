@@ -6,6 +6,7 @@ import { SmallerProductCardComponent } from '../../widgets/smaller-product-card/
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/getuserid.service';
+import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 interface Tool {
   productimage: string;
   productname: string;
@@ -86,6 +87,24 @@ hasMoreUserReviews: boolean = false;
 userProductsPageSize: number = 10;
 hasMoreUserProducts: boolean = true;
 isLoadingUserProducts: boolean = false;
+private productNameCheck$ = new Subject<string>();
+
+
+
+
+
+
+
+
+
+
+ productNameExists: boolean = false;
+  productNameMessage: string = '';
+  productNameMessageClass: string = '';
+  isCheckingProductName: boolean = false;
+  existingProduct: any = null;
+   originalProductName: string = '';
+
 
 
 
@@ -123,7 +142,7 @@ isLoadingUserProducts: boolean = false;
       deployments: this.fb.array([this.fb.control('', Validators.required)]),
 
       mediaPreviews: this.fb.array([this.fb.control(null)]),
-      repositories: this.fb.array([this.fb.control(null)]),
+      repositories: this.fb.array([this.fb.control('')]), 
 
       productfb: [''],
       documentationlink: [''],
@@ -146,6 +165,11 @@ isLoadingUserProducts: boolean = false;
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
+
+
+      // Setup product name checker
+    this.setupProductNameChecker();
+
 
     // Check query param for active tab
     this.route.queryParams.subscribe((params: any) => {
@@ -184,6 +208,82 @@ isLoadingUserProducts: boolean = false;
     }
   }
 
+ setupProductNameChecker(): void {
+    this.productNameCheck$.pipe(
+      debounceTime(500), // Wait 500ms after user stops typing
+      distinctUntilChanged(),
+      switchMap(productName => {
+        if (!productName || productName.trim().length === 0) {
+          this.productNameExists = false;
+          this.productNameMessage = '';
+          this.productNameMessageClass = '';
+          this.existingProduct = null;
+          return [];
+        }
+
+        // Skip check if in edit mode and name hasn't changed
+        if (this.isEditMode && productName.trim().toLowerCase() === this.originalProductName.toLowerCase()) {
+          this.productNameExists = false;
+          this.productNameMessage = '';
+          this.productNameMessageClass = '';
+          this.existingProduct = null;
+          return [];
+        }
+
+        this.isCheckingProductName = true;
+        return this.checkProductName(productName);
+      })
+    ).subscribe({
+      next: (result: any) => {
+        this.isCheckingProductName = false;
+
+        if (result && result.exists !== undefined) {
+          this.productNameExists = result.exists;
+          this.productNameMessage = result.message;
+          this.existingProduct = result.product;
+
+          if (result.exists) {
+            this.productNameMessageClass = 'error-message';
+          } else if (result.message) {
+            this.productNameMessageClass = 'success-message';
+          } else {
+            this.productNameMessageClass = '';
+          }
+        }
+      },
+      error: (error) => {
+        console.error('Error checking product name:', error);
+        this.isCheckingProductName = false;
+        this.productNameExists = false;
+        this.productNameMessage = 'Error checking product name';
+        this.productNameMessageClass = 'error-message';
+      }
+    });
+  }
+
+
+  openProductInNewTab(event: Event, productId: string): void {
+  event.preventDefault(); // Prevent default anchor behavior
+  
+  const url = `/home/product-item?productid=${productId}`;
+  
+  // Open in new tab
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+
+async checkProductName(productname: string): Promise<any> {
+  const payload = { productname: productname };
+  return this.http.post(this.APIURL + 'check_product_name', payload).toPromise();
+}
+
+onProductNameChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const productName = input.value;
+    this.productNameCheck$.next(productName);
+  }
+
+  
 async onDeleteAccount(): Promise<void> {
   if (this.deleteConfirmText === 'delete-account') {
     this.showMessage("Deleting your account...", "error");
@@ -382,6 +482,7 @@ private resetProductForm(): void {
     this.selectedImage = null;
     this.selectedProductFile = null;
     this.selectedProductImage = null;
+    this.originalProductName = '';
     
     // Reset form validation state
     this.productAddingForm.markAsUntouched();
@@ -426,6 +527,8 @@ async getProductDetailsToUpdate(productId: string): Promise<void> {
   private populateProductForm(response: any): void {
     const prod = response.product;
     this.isFeaturedGlobal = prod.isFeatured || 0;
+
+    this.originalProductName = prod.productname || '';
  
 
     // Patch basic form fields

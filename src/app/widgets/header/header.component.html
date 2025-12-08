@@ -2,20 +2,97 @@
 <div class="header-holder">
     <a routerLink="/"><img src="../../../assets/images/logo.png" alt="logo" class="logo"></a>
 
-
     <!-- Tabs inside header -->
-    <div class="right-content-holder">
-
         <app-search-bar></app-search-bar>
 
+    <div class="right-content-holder">
 
-        <div class="tabs-container">
-            <button class="tab-btn" *ngFor="let tab of tabs" [ngClass]="{'active-tab': activeTab === tab.key}"
-                (click)="toggleTab(tab.key)">
-                {{ tab.label }}
-                <span class="dropdown-arrow" [ngClass]="{'arrow-up': activeTab === tab.key}">▼</span>
+
+        <!-- Filter Dropdown Button -->
+        <div class="filter-wrapper">
+            <button class="filter-btn" (click)="toggleFilterDropdown()" [class.active]="filterDropdownOpen">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
             </button>
+
+            <!-- Filter Dropdown Menu -->
+            <div class="filter-dropdown" *ngIf="filterDropdownOpen" [@slideDown]>
+                <div class="filter-menu">
+                    <!-- Left Side: Main Categories -->
+                    <div class="filter-main-menu">
+                        <div class="filter-menu-item" 
+                             *ngFor="let filter of filterOptions"
+                             (mouseenter)="selectFilter(filter.key)"
+                             (click)="selectFilter(filter.key)"
+                             [class.active]="selectedFilter === filter.key">
+                            <span class="filter-label">{{ filter.label }}</span>
+                            <span class="filter-count">({{ getFilterCount(filter.key) }})</span>
+                            <span class="filter-arrow">›</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Sub Items -->
+                    <div class="filter-sub-menu" *ngIf="selectedFilter">
+                        <!-- Categories -->
+                        <div class="filter-sub-content" *ngIf="selectedFilter === 'categories'">
+                            <h4 class="sub-menu-title">Categories</h4>
+                            <div class="sub-menu-grid">
+                                <a *ngFor="let category of getFilteredItems('categories')"
+                                   [routerLink]="['/home/category', category.categoryName, 'category']"
+                                   class="sub-menu-item"
+                                   (click)="closeFilterDropdown()">
+                                    <span>{{ category.categoryName }}</span>
+                                </a>
+                            </div>
+                            <button *ngIf="categories.length > 8" 
+                                    class="view-all-btn" 
+                                    (click)="expandFilter('categories')">
+                                {{ expandedFilters['categories'] ? 'Show Less' : 'View All (' + categories.length + ')' }}
+                            </button>
+                        </div>
+
+                        <!-- Use Cases -->
+                        <div class="filter-sub-content" *ngIf="selectedFilter === 'usecases'">
+                            <h4 class="sub-menu-title">Use Cases</h4>
+                            <div class="sub-menu-grid">
+                                <a *ngFor="let usecase of getFilteredItems('usecases')"
+                                   [routerLink]="['/home/category', usecase.usecaseName, 'usecase']"
+                                   class="sub-menu-item"
+                                   (click)="closeFilterDropdown()">
+                                    <span>{{ usecase.usecaseName }}</span>
+                                </a>
+                            </div>
+                            <button *ngIf="useCases.length > 8" 
+                                    class="view-all-btn" 
+                                    (click)="expandFilter('usecases')">
+                                {{ expandedFilters['usecases'] ? 'Show Less' : 'View All (' + useCases.length + ')' }}
+                            </button>
+                        </div>
+
+                        <!-- Technology -->
+                        <div class="filter-sub-content" *ngIf="selectedFilter === 'technology'">
+                            <h4 class="sub-menu-title">Technologies</h4>
+                            <div class="sub-menu-grid">
+                                <a *ngFor="let tech of getFilteredItems('technology')"
+                                   [routerLink]="['/home/category', tech.technologyName, 'technology']"
+                                   class="sub-menu-item"
+                                   (click)="closeFilterDropdown()">
+                                    <span>{{ tech.technologyName }}</span>
+                                </a>
+                            </div>
+                            <button *ngIf="technologies.length > 8" 
+                                    class="view-all-btn" 
+                                    (click)="expandFilter('technology')">
+                                {{ expandedFilters['technology'] ? 'Show Less' : 'View All (' + technologies.length + ')' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        
 
         <div class="auth-function-holder">
             <a routerLink="/home/battle-card" class="vs-btn">Vs</a>
@@ -34,6 +111,9 @@
         </div>
     </div>
 </div>
+
+<!-- Filter Dropdown Overlay -->
+<div class="filter-overlay" *ngIf="filterDropdownOpen" (click)="closeFilterDropdown()"></div>
 
 <!-- Tab Dropdown Overlay -->
 <div class="tab-dropdown-overlay" *ngIf="activeTab" [@slideDown] (click)="closeDropdown()">

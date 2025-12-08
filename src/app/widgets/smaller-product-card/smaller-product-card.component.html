@@ -15,9 +15,7 @@
         <img [src]="product.productimage" alt="tool icon" />
     </div>
     <h3 class="product-name">{{ product.productname }}</h3>
-    <p class="product-type">
-        <span>Category</span> {{ product.productcategory }}
-    </p>
+    
 
     <div class="chip-wrapper">
         <span class="chip" *ngFor="let tag of product.productusecase | slice:0:3">{{ tag }}</span>

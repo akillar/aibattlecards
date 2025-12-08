@@ -61,7 +61,7 @@
 .product-icon {
   width: 150px;
   height: 150px;
-  margin: 0 auto 10px;
+  margin: 0 auto 0px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -163,8 +163,10 @@
 }
 .featured-ribbon {
   position: absolute;
-  top: 3px;
-  background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+  top: 5px;
+  left: 50%;
+  translate: -50%;
+  background: #5a67d8;
   color: #ffffff;
   padding: 6px 14px 6px 12px;
   border-radius: 20px;

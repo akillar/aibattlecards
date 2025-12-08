@@ -40,6 +40,22 @@ export class HeaderComponent implements OnInit {
   showAllUseCases: boolean = false;
   showAllTechnologies: boolean = false;
 
+  // Filter Dropdown State
+  filterDropdownOpen: boolean = false;
+  selectedFilter: string | null = null;
+  expandedFilters: { [key: string]: boolean } = {
+    categories: false,
+    usecases: false,
+    technology: false
+  };
+
+  // Filter Options
+  filterOptions = [
+    { label: 'Categories', key: 'categories', icon: '' },
+    { label: 'Use Cases', key: 'usecases', icon: '' },
+    { label: 'Technology', key: 'technology', icon: '' }
+  ];
+
   // Tabs
   tabs = [
     { label: 'Categories', key: 'categories' },
@@ -47,17 +63,14 @@ export class HeaderComponent implements OnInit {
     { label: 'Technology', key: 'technology' }
   ];
 
-  // Categories (add more items to test "See More")
+  // Categories
   categories: any[] = [];
 
   // Use Cases
   useCases: any[] = [];
-  
-  
 
   // Technologies
-    technologies: any[] = [];
- 
+  technologies: any[] = [];
 
   constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 
@@ -73,14 +86,15 @@ export class HeaderComponent implements OnInit {
     } else {
       this.isuserloggedin = false;
     }
-  }
 
+    // Set default selected filter
+    this.selectedFilter = 'categories';
+  }
 
   async loadTechnologies(): Promise<void> {
     this.http.get(this.APIURL + `get_technologies`).subscribe({
       next: (response: any) => {
         if (response.message === "Technologies retrieved successfully") {
-          // Map the response to technologies array
           this.technologies = response.technologies.map((t: any) => ({
             id: t.id,
             techknologyid: t.techknologyid,
@@ -100,22 +114,16 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-
-
-
- async loadUsecases(): Promise<void> {
-  
+  async loadUsecases(): Promise<void> {
     this.http.get(this.APIURL + `get_usecases`).subscribe({
       next: (response: any) => {
         if (response.message === "Use cases retrieved successfully") {
-          // Map the response to usecases array
           this.useCases = response.usecases.map((u: any) => ({
             id: u.id,
             usecaseid: u.usecaseadminid,
             usecaseName: u.usecaseName,
             createdDate: new Date(u.createdDate)
           }));
-
         } else {
           this.useCases = [];
         }
@@ -132,7 +140,6 @@ export class HeaderComponent implements OnInit {
     this.http.get(this.APIURL + `get_categories`).subscribe({
       next: (response: any) => {
         if (response.message === "Categories retrieved successfully") {
-          // Map the response to categories array
           this.categories = response.categories.map((c: any) => ({
             id: c.id,
             categoryid: c.categoryid,
@@ -151,14 +158,117 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  // ========================================
+  //  FILTER DROPDOWN METHODS
+  // ========================================
 
+  /**
+   * Toggle filter dropdown visibility
+   */
+  toggleFilterDropdown(): void {
+    this.filterDropdownOpen = !this.filterDropdownOpen;
+    
+    // Close other dropdowns
+    if (this.filterDropdownOpen) {
+      this.dropdownOpen = false;
+      this.activeTab = null;
+      
+      // Set default selected filter if not set
+      if (!this.selectedFilter) {
+        this.selectedFilter = 'categories';
+      }
+    } else {
+      this.selectedFilter = null;
+    }
+  }
 
-  // Toggle tab dropdown
-  toggleTab(tab: string) {
+  /**
+   * Close filter dropdown
+   */
+  closeFilterDropdown(): void {
+    this.filterDropdownOpen = false;
+    this.selectedFilter = null;
+    // Reset expanded states
+    this.expandedFilters = {
+      categories: false,
+      usecases: false,
+      technology: false
+    };
+  }
+
+  /**
+   * Select a filter category
+   */
+  selectFilter(filterKey: string): void {
+    this.selectedFilter = filterKey;
+  }
+
+  /**
+   * Get count for a filter category
+   */
+  getFilterCount(filterKey: string): number {
+    switch (filterKey) {
+      case 'categories':
+        return this.categories.length;
+      case 'usecases':
+        return this.useCases.length;
+      case 'technology':
+        return this.technologies.length;
+      default:
+        return 0;
+    }
+  }
+
+  /**
+   * Get filtered items based on expanded state
+   */
+  getFilteredItems(filterKey: string): any[] {
+    const limit = 8; // Show 8 items by default
+    
+    switch (filterKey) {
+      case 'categories':
+        return this.expandedFilters['categories'] 
+          ? this.categories 
+          : this.categories.slice(0, limit);
+      
+      case 'usecases':
+        return this.expandedFilters['usecases'] 
+          ? this.useCases 
+          : this.useCases.slice(0, limit);
+      
+      case 'technology':
+        return this.expandedFilters['technology'] 
+          ? this.technologies 
+          : this.technologies.slice(0, limit);
+      
+      default:
+        return [];
+    }
+  }
+
+  /**
+   * Expand/collapse filter items
+   */
+  expandFilter(filterKey: string): void {
+    this.expandedFilters[filterKey] = !this.expandedFilters[filterKey];
+  }
+
+  // ========================================
+  //  EXISTING TAB DROPDOWN METHODS
+  // ========================================
+
+  /**
+   * Toggle tab dropdown
+   */
+  toggleTab(tab: string): void {
     if (this.activeTab === tab) {
       this.activeTab = null;
     } else {
       this.activeTab = tab;
+      // Close filter dropdown
+      this.filterDropdownOpen = false;
+      this.selectedFilter = null;
+      
       // Reset show all flags when switching tabs
       this.showAllCategories = false;
       this.showAllUseCases = false;
@@ -166,8 +276,10 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  // Toggle show all items
-  toggleShowAll(type: string) {
+  /**
+   * Toggle show all items
+   */
+  toggleShowAll(type: string): void {
     if (type === 'categories') {
       this.showAllCategories = !this.showAllCategories;
     } else if (type === 'usecases') {
@@ -177,13 +289,19 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  // Close dropdown when item is clicked
-  closeDropdown() {
+  /**
+   * Close dropdown when item is clicked
+   */
+  closeDropdown(): void {
     this.activeTab = null;
     this.showAllCategories = false;
     this.showAllUseCases = false;
     this.showAllTechnologies = false;
   }
+
+  // ========================================
+  //  USER METHODS
+  // ========================================
 
   async getUserDetails(userid: string): Promise<void> {
     const payload = { userid };
@@ -213,17 +331,24 @@ export class HeaderComponent implements OnInit {
     return initials;
   }
 
-  toggleDropdown() {
+  toggleDropdown(): void {
     this.dropdownOpen = !this.dropdownOpen;
+    
+    // Close other dropdowns
+    if (this.dropdownOpen) {
+      this.filterDropdownOpen = false;
+      this.selectedFilter = null;
+      this.activeTab = null;
+    }
   }
 
-  showlogoutpopup(e: Event) {
+  showlogoutpopup(e: Event): void {
     e.preventDefault();
     e.stopPropagation();
     this.showLogoutConfirm = true;
   }
 
-  onLogout() {
+  onLogout(): void {
     this.showLogoutConfirm = false;
     sessionStorage.removeItem('userid');
     this.router.navigate(['/home/dashboard']);
@@ -231,9 +356,15 @@ export class HeaderComponent implements OnInit {
     this.dropdownOpen = false;
   }
 
-  // Close dropdowns when clicking outside
+  // ========================================
+  //  HOST LISTENERS
+  // ========================================
+
+  /**
+   * Close dropdowns when clicking outside
+   */
   @HostListener('document:click', ['$event'])
-  onClickOutside(event: Event) {
+  onClickOutside(event: Event): void {
     const target = event.target as HTMLElement;
     
     // Close profile dropdown
@@ -241,6 +372,28 @@ export class HeaderComponent implements OnInit {
       this.dropdownOpen = false;
     }
 
-    // Close tab dropdown (handled by overlay click)
+    // Close filter dropdown
+    if (!target.closest('.filter-wrapper') && !target.closest('.filter-dropdown')) {
+      if (this.filterDropdownOpen) {
+        // Small delay to allow click events to process
+        setTimeout(() => {
+          this.filterDropdownOpen = false;
+          this.selectedFilter = null;
+        }, 100);
+      }
+    }
+
+    // Tab dropdown is handled by overlay click
+  }
+
+  /**
+   * Close all dropdowns on escape key
+   */
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    this.filterDropdownOpen = false;
+    this.selectedFilter = null;
+    this.dropdownOpen = false;
+    this.activeTab = null;
   }
 }

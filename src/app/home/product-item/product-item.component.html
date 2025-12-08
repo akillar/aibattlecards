@@ -195,7 +195,7 @@
             </div>
 
             <!-- Repositories -->
-            <div class="detail-item" *ngIf="productDetails.repositories.length">
+            <div class="detail-item" *ngIf="hasValidRepositories()">
                 <span class="detail-label">Repositories:</span>
                 <div class="detail-content">
                     <div class="chip-wrapper">
@@ -258,28 +258,26 @@
 
 
 
-            <div class="detail-item">
+            <div class="detail-item" *ngIf="productDetails.xlink != ''">
                 <span class="detail-label">X Link:</span>
                 <div class="detail-content">
                     <a *ngIf="productDetails.xlink" [href]="productDetails.xlink" target="_blank" class="detail-link">
                         {{ productDetails.xlink }}
                     </a>
-                    <span *ngIf="!productDetails.xlink" class="detail-value detail-no-data">Not
-                        available</span>
+                     
                 </div>
             </div>
 
 
             <!-- Documentation -->
-            <div class="detail-item">
+            <div class="detail-item" *ngIf="productDetails.productdocumentation != ''">
                 <span class="detail-label">Documentation:</span>
                 <div class="detail-content">
                     <a *ngIf="productDetails.productdocumentation" [href]="productDetails.productdocumentation"
                         target="_blank" class="detail-link">
                         {{ productDetails.productdocumentation }}
                     </a>
-                    <span *ngIf="!productDetails.productdocumentation" class="detail-value detail-no-data">Not
-                        available</span>
+                   
                 </div>
             </div>
         </div>
@@ -312,15 +310,14 @@
             </div>
 
             <!-- Website -->
-            <div class="detail-item">
+            <div class="detail-item" *ngIf="productDetails.productwebsite != ''">
                 <span class="detail-label">Website:</span>
                 <div class="detail-content">
                     <a *ngIf="productDetails.productwebsite" [href]="productDetails.productwebsite" target="_blank"
                         class="detail-link">
                         {{ productDetails.productwebsite }}
                     </a>
-                    <span *ngIf="!productDetails.productwebsite" class="detail-value detail-no-data">Not
-                        available</span>
+                   
                 </div>
             </div>
 
