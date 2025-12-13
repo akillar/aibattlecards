@@ -61,6 +61,7 @@ export class BattleCardComponent implements OnInit{
   constructor(private http: HttpClient, private router:Router) { }
   ngOnInit(): void {
 window.scrollTo({ top: 0, behavior: 'smooth' });
+this.loadCategories();
   }
 
   toolsArray: Tool[] = [];
@@ -109,7 +110,89 @@ window.scrollTo({ top: 0, behavior: 'smooth' });
   previewImageAlt: string = '';
  shimmerArray = Array(4).fill(0); // Show 5 shimmer cards initially
   loadMoreShimmerArray = Array(2).fill(0);
+
+
+
+  categories: any[] = [];
+categorySearchTerm: string = '';
+filteredCategories: any[] = [];
+showCategoryDropdown: boolean = false;
+selectedCategoryName: string = '';
+
   
+
+
+  // Update the loadCategories method (already in your code)
+async loadCategories(): Promise<void> {
+  this.http.get(this.APIURL + `get_categories`).subscribe({
+    next: (response: any) => {
+      if (response.message === "Categories retrieved successfully") {
+        this.categories = response.categories.map((c: any) => ({
+          id: c.id,
+          categoryid: c.categoryid,
+          categoryName: c.categoryName,
+          createdDate: new Date(c.createdDate)
+        }));
+        this.filteredCategories = [...this.categories];
+      } else {
+        this.categories = [];
+        this.filteredCategories = [];
+      }
+    },
+    error: (error) => {
+      console.error('Error loading categories:', error);
+      alert("Failed to load categories. Please try again.");
+      this.categories = [];
+      this.filteredCategories = [];
+    }
+  });
+}
+
+// Add this method to filter categories based on search
+onCategorySearch(): void {
+  const searchLower = this.categorySearchTerm.toLowerCase().trim();
+  
+  if (searchLower === '') {
+    this.filteredCategories = [...this.categories];
+  } else {
+    this.filteredCategories = this.categories.filter(category =>
+      category.categoryName.toLowerCase().includes(searchLower)
+    );
+  }
+}
+
+// Add this method to select a category
+selectCategory(category: any): void {
+  this.selectedCategory = category.categoryName;
+  this.selectedCategoryName = category.categoryName;
+  this.categorySearchTerm = category.categoryName;
+  this.showCategoryDropdown = false;
+  this.onCategoryChange(); // Call your existing method
+}
+
+// Add this method to toggle dropdown
+toggleCategoryDropdown(): void {
+  this.showCategoryDropdown = !this.showCategoryDropdown;
+  if (this.showCategoryDropdown) {
+    this.filteredCategories = [...this.categories];
+  }
+}
+
+// Add this method to handle input focus
+onCategoryInputFocus(): void {
+  this.showCategoryDropdown = true;
+  this.filteredCategories = [...this.categories];
+}
+
+// Add this method to clear selection
+clearCategorySelection(): void {
+  this.selectedCategory = '';
+  this.selectedCategoryName = '';
+  this.categorySearchTerm = '';
+  this.filteredCategories = [...this.categories];
+  this.showCategoryDropdown = false;
+}
+
 
   openReview(tool: Tool) {
     this.popupSelected = [tool];
@@ -402,12 +485,23 @@ async getReviewCountsForSelected(): Promise<void> {
     document.body.style.overflow = 'auto';
   }
 
+  // @HostListener('document:click', ['$event'])
+  // handleClickOutside(event: Event) {
+  //   const target = event.target as HTMLElement;
+  //   if (!target.closest('.search-bar-wrapper')) {
+  //     // this.filteredTools = [];
+  //   }
+  // }
+
   @HostListener('document:click', ['$event'])
-  handleClickOutside(event: Event) {
-    const target = event.target as HTMLElement;
-    if (!target.closest('.search-bar-wrapper')) {
-      // this.filteredTools = [];
-    }
+onDocumentClick(event: MouseEvent): void {
+  const target = event.target as HTMLElement;
+  const clickedInside = target.closest('.category-search-wrapper');
+  
+  if (!clickedInside) {
+    this.showCategoryDropdown = false;
   }
+}
+
  
 }

@@ -127,7 +127,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 13px;
-  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  background:#5a67d8;
   color: white;
   border: none;
   border-radius: 50%;
@@ -139,12 +139,12 @@
 }
 
 .filter-btn:hover {
-  background: linear-gradient(135deg, #357abd 0%, #2d6ba8 100%);
+ background:#616ddb;
   box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
 }
 
 .filter-btn.active {
-  background: linear-gradient(135deg, #357abd 0%, #2d6ba8 100%);
+ background:#4958dd;
   box-shadow: 0 4px 12px rgba(74, 144, 226, 0.5);
 }
 
@@ -221,8 +221,8 @@
 }
 
 .filter-menu-item.active {
-  background: linear-gradient(90deg, #e8f0fe 0%, #f0f7ff 100%);
-  color: #4a90e2;
+  background:#5a67d84c;
+  color:#5a67d8;
   font-weight: 600;
 }
 
@@ -250,7 +250,7 @@
 }
 
 .filter-menu-item.active .filter-count {
-  background: #4a90e2;
+  background:#5a67d8;
   color: white;
 }
 
@@ -333,7 +333,7 @@
 
 .sub-menu-item:hover {
   background: #e8f0fe;
-  color: #4a90e2;
+  color: #5a67d8;
 }
 
 .item-dot {
@@ -348,7 +348,7 @@
   width: 100%;
   padding: 0.7rem;
   background: transparent;
-  color: #4a90e2;
+  color: #5a67d8;
   border: none;
   font-weight: 600;
   font-size: 14px;
@@ -358,7 +358,7 @@
 }
 
 .view-all-btn:hover {
-  color: #4a91e2dc;
+ color: #4150d0;
 
 }
 

@@ -4,19 +4,58 @@
 <div class="battle-card-wrapper">
 
     <div class="selecttag-holder">
-        <h1 class="tag-heading"> Choose the Catgory you want to compaire</h1>
-        <select class="select-category" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
-            <option value="" disabled selected>Select a Category</option>
-            <option value="AI model">AI model</option>
-            <option value="Agent">Agent</option>
-            <option value="Voice">Voice</option>
-            <option value="Image">Image</option>
-            <option value="Video Editing">Video Editing</option>
-            <option value="Dev Tools">Dev Tools</option>
-            <option value="Utility">Utility</option>
-        </select>
-
+  <h1 class="tag-heading">Choose the Category you want to compare</h1>
+  
+  <div class="category-search-wrapper">
+    <div class="search-input-container">
+      <input 
+        type="text" 
+        class="category-search-input"
+        [(ngModel)]="categorySearchTerm"
+        (input)="onCategorySearch()"
+        (focus)="onCategoryInputFocus()"
+        placeholder="Search categories..."
+        autocomplete="off"
+      />
+      
+      
     </div>
+    
+    <div class="category-dropdown" *ngIf="showCategoryDropdown && filteredCategories.length > 0">
+      <div 
+        class="category-item" 
+        *ngFor="let category of filteredCategories"
+        (click)="selectCategory(category)"
+        [class.selected]="selectedCategory === category.categoryName"
+      >
+        <span class="category-name">{{ category.categoryName }}</span>
+        <svg 
+          *ngIf="selectedCategory === category.categoryName" 
+          class="check-icon" 
+          width="16" 
+          height="16" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="3"
+        >
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+    </div>
+    
+    <div class="category-dropdown no-results" *ngIf="showCategoryDropdown && filteredCategories.length === 0">
+      <div class="no-results-message">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <p>No categories found</p>
+      </div>
+    </div>
+  </div>
+</div>
 
     <!-- Search Input (only show after category selected) -->
     <div class="searchinputwrapper" *ngIf="iscategoryselected">
