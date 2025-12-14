@@ -179,18 +179,80 @@
                             <option value="Free&Paid">Free & Paid</option>
                         </select>
                     </div>
+<div class="form-group">
+  <label>Technology <span class="required">*</span></label>
+  
 
-                    <div class="form-group">
-                        <label>Technology</label>
+   <div class="selected-technologies" *ngIf="selectedTechnologies.length > 0">
+    <div class="tech-chip" *ngFor="let tech of selectedTechnologies">
+      <span class="chip-text">{{ tech }}</span>
+      <button 
+        type="button" 
+        class="chip-remove" 
+        (click)="removeTechnology(tech)"
+        title="Remove technology">
+        ×
+      </button>
+    </div>
+  </div>
 
-                        <select class="select-category" formControlName="technology">
-                            <option value="" disabled>Select Technology</option>
+  <!-- Technology Input with Dropdown -->
+  <div class="technology-selector">
+    <div class="technology-input-wrapper">
+      <input 
+        type="text" 
+        class="technology-input"
+        [(ngModel)]="technologyInput"
+        (input)="onTechnologyInput($event)"
+        (focus)="onTechnologyInputFocus()"
+        (click)="onTechnologyInputFocus()"
+        [ngModelOptions]="{standalone: true}"
+        placeholder="Search and select technologies..."
+        autocomplete="off"
+      />
+      
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+    </div>
 
-                            <option *ngFor="let t of technologies" [value]="t.technologyName">
-                                {{ t.technologyName }}
-                            </option>
-                        </select>
-                    </div>
+    <!-- Technology Dropdown -->
+    <div class="technology-dropdown" *ngIf="showTechnologyDropdown && filteredTechnologies.length > 0">
+      <div 
+        class="technology-dropdown-item" 
+        *ngFor="let tech of filteredTechnologies"
+        (click)="selectTechnology(tech)">
+        <span class="tech-name">{{ tech }}</span>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div class="technology-dropdown no-results" *ngIf="showTechnologyDropdown && filteredTechnologies.length === 0 && technologyInput.trim()">
+      <div class="no-results-message">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <p>No technologies found</p>
+      </div>
+    </div>
+
+    <!-- All Technologies Selected Message -->
+    <div class="technology-dropdown no-results" *ngIf="showTechnologyDropdown && filteredTechnologies.length === 0 && !technologyInput.trim() && selectedTechnologies.length > 0">
+      <div class="no-results-message">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <p>All available technologies selected</p>
+      </div>
+    </div>
+  </div>
+
+   
+</div>
 
                     <div class="form-group">
                         <label>Website</label>

@@ -428,7 +428,24 @@ hasValidRepositories(): boolean {
     r => typeof r === 'string' && r.trim() !== ''
   );
 }
-
+getTechnologies(): string[] {
+  if (!this.productDetails?.producttechnology || this.productDetails.producttechnology.length === 0) {
+    return [];
+  }
+  
+  // If it's already an array with comma-separated values, split them
+  const allTechnologies: string[] = [];
+  
+  this.productDetails.producttechnology.forEach(tech => {
+    if (tech && typeof tech === 'string') {
+      // Split by comma and trim each value
+      const splitTechs = tech.split(',').map(t => t.trim()).filter(t => t.length > 0);
+      allTechnologies.push(...splitTechs);
+    }
+  });
+  
+  return allTechnologies;
+}
   async getProductDetails(productid: string): Promise<void> {
     this.isLoading = true;
     const payload = { productid };

@@ -208,14 +208,16 @@
 
 
             <!-- Technology -->
-            <div class="detail-item" *ngIf="productDetails.producttechnology.length">
-                <span class="detail-label">Technology:</span>
-                <div class="detail-content">
-                    <div class="chip-wrapper">
-                        <span class="chip" *ngFor="let t of productDetails.producttechnology">{{ t }}</span>
-                    </div>
-                </div>
-            </div>
+            <div class="detail-item"  >
+  <span class="detail-label">Technology:</span>
+  <div class="detail-content">
+    <div class="chip-wrapper">
+      <span class="chip tech-chip" *ngFor="let tech of getTechnologies()">
+        <span class="chip-text">{{ tech }}</span>
+      </span>
+    </div>
+  </div>
+</div>
 
             <!-- Base AI Model -->
             <div class="detail-item" *ngIf="productDetails.baseModels.length">
